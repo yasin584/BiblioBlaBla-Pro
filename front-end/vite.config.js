@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
+import tailwindcss from'@tailwindcss/vite';
 import babel from '@rolldown/plugin-babel';
 
 // https://vite.dev/config/
@@ -12,7 +13,7 @@ const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(file
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  plugins: [react(), babel({
+  plugins: [react(), tailwindcss(), babel({
     presets: [reactCompilerPreset()]
   })],
   test: {
