@@ -1,5 +1,5 @@
 package nl.biblioblabla.pro.exception;
 
-public class CustomExceptionHandler {
+public class ResourceNotFoundException {
     
 }

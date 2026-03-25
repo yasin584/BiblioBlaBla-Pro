@@ -1,5 +1,5 @@
 package nl.biblioblabla.pro.dto;
 
-public class LoginRequest {
+public class LoginResponse {
     
 }
