@@ -19,7 +19,6 @@ CREATE TABLE gebruikers (
     naam VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     wachtwoord_hash VARCHAR(255) NOT NULL,
-    rol ENUM('gebruiker') NOT NULL DEFAULT 'gebruiker'
 );
 
 CREATE TABLE leningen (
