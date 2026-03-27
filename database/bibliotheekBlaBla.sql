@@ -11,6 +11,7 @@ CREATE TABLE boeken (
     titel VARCHAR(255) NOT NULL UNIQUE,
     genre VARCHAR(50),
     auteur_id INT NOT NULL,
+    gemiddelde_beoordeling DECIMAL(3,2) DEFAULT 0,
     FOREIGN KEY (auteur_id) REFERENCES auteurs(id) ON DELETE CASCADE
 );
 
@@ -18,8 +19,8 @@ CREATE TABLE gebruikers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     naam VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    wachtwoord_hash VARCHAR(255) NOT NULL,
-    rol ENUM('gebruiker') NOT NULL DEFAULT 'gebruiker'
+    wachtwoord_hash VARCHAR(255) NOT NULL
+
 );
 
 CREATE TABLE leningen (

@@ -1,23 +1,23 @@
 package nl.biblioblabla.pro.model;
 
-public class Author {
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDate;
+
+@Getter
+@Setter
+public class Leningen {
+
     private int id;
-    private String naam;
+    private int gebruikerId;
+    private int boekId;
+    private LocalDate uitleendatum;
+    private LocalDate inleverdatum;
+    private int beoordeling;
+    private String status;
 
-
-    public int getId() {
-        return id;
+    public Leningen() {
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNaam() {
-        return naam;
-    }
-
-    public void setNaam(String naam) {
-        this.naam = naam;
-    }
 }
