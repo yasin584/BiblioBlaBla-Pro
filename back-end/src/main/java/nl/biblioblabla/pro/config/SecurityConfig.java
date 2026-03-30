@@ -39,7 +39,11 @@ public class SecurityConfig {
                 // 4. Autorisatie regels
                 .authorizeHttpRequests(auth -> auth
                         // Publieke endpoints (iedereen mag deze aanroepen zonder token)
-                        .requestMatchers("/user/login").permitAll()   
+                        .requestMatchers("/user/login").permitAll() 
+                        
+                        // Je zou /user/logout ook permitAll() kunnen maken, of juist
+                        // authenticated() zodat je alleen kunt uitloggen als je bent ingelogd.
+                        .requestMatchers("/user/logout").authenticated()
 
                         // Beveiligde endpoints (hier is een geldige JWT token voor nodig)
                         .requestMatchers("/boeken/**").authenticated()
@@ -62,10 +66,10 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // React frontend toestaan
-        configuration.setAllowedOrigins(List.of("http://localhost:8080"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
         
         // Alle HTTP methodes toestaan
-        configuration.setAllowedMethods(List.of("GET", "POST", "PATCH"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "OPTIONS"));
         
         // Alle headers toestaan
         configuration.setAllowedHeaders(List.of("*"));

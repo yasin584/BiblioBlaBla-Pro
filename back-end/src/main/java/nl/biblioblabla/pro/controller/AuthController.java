@@ -9,6 +9,7 @@ import nl.biblioblabla.pro.service.AuthService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -36,6 +37,16 @@ public class AuthController {
             // Return 401 Unauthorized (via de HttpStatus enum) met de JSON body
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        // "Destroy" de huidige veiligheidscontext van dit verzoek
+        SecurityContextHolder.clearContext();
+        
+        // Stuur een bevestiging terug naar de frontend
+        return ResponseEntity.ok(new AuthErrorResponse("Succesvol uitgelogd.")); 
+        // (Tip: Misschien wil je AuthErrorResponse hernoemen naar MessageResponse of iets algemeners!)
     }
 }
 
