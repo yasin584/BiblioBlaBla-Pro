@@ -19,8 +19,7 @@ CREATE TABLE gebruikers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     naam VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    wachtwoord_hash VARCHAR(255) NOT NULL
-
+    wachtwoord_hash VARCHAR(255) NOT NULL,
 );
 
 CREATE TABLE leningen (
