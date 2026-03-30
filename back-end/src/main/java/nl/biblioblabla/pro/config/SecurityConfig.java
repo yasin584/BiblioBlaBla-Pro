@@ -36,22 +36,26 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
+
+
                 // 4. Autorisatie regels
                 .authorizeHttpRequests(auth -> auth
-                        // Publieke endpoints (iedereen mag deze aanroepen zonder token)
-                        .requestMatchers("/user/login").permitAll() 
-                        
-                        // Je zou /user/logout ook permitAll() kunnen maken, of juist
-                        // authenticated() zodat je alleen kunt uitloggen als je bent ingelogd.
-                        .requestMatchers("/user/logout").authenticated()
+                    // Publieke endpoints
+                    .requestMatchers("/user/login", "/user/register").permitAll()
 
-                        // Beveiligde endpoints (hier is een geldige JWT token voor nodig)
-                        .requestMatchers("/boeken/**").authenticated()
-                        .requestMatchers("/leningen/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/boeken/**").authenticated()
+                    // Boeken
+                    .requestMatchers(HttpMethod.GET, "/boeken/**").permitAll()
+                    .requestMatchers("/boeken/**").authenticated()
 
-                        // Alles wat we vergeten zijn, is standaard beveiligd
-                        .anyRequest().authenticated()
+                    // Leningen
+                    .requestMatchers("/leningen/**").authenticated()
+                    .requestMatchers(HttpMethod.GET, "/leningen/gebruiker/**").authenticated()   // Filteren op gebruiker
+                    .requestMatchers(HttpMethod.GET, "/leningen/filter/zoek").authenticated()    // Zoeken op titel of auteur
+                    .requestMatchers(HttpMethod.GET, "/leningen/filter/genre").authenticated()   // Filteren op genre
+                    .requestMatchers(HttpMethod.GET, "/leningen/filter/datum").authenticated()   // Filteren op datum
+
+                     // Default: alles wat niet expliciet genoemd is
+                    .anyRequest().authenticated()
                 )
 
                 // 5. Voeg onze eigen JWT filter toe vóór de standaard inlog-filter
