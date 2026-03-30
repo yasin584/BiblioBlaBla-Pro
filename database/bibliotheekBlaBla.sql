@@ -11,6 +11,7 @@ CREATE TABLE boeken (
     titel VARCHAR(255) NOT NULL UNIQUE,
     genre VARCHAR(50),
     auteur_id INT NOT NULL,
+    gemiddelde_beoordeling DECIMAL(3,2) DEFAULT 0,
     FOREIGN KEY (auteur_id) REFERENCES auteurs(id) ON DELETE CASCADE
 );
 
