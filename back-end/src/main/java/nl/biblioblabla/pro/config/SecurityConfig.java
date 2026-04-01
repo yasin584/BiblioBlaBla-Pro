@@ -43,8 +43,6 @@ public class SecurityConfig {
                     // Publieke endpoints
                     .requestMatchers("/user/login", "/user/register").permitAll()
 
-                        .requestMatchers("/user/logout").authenticated()
-
                     // Boeken
                     .requestMatchers(HttpMethod.GET, "/boeken/**").permitAll()
                     .requestMatchers("/boeken/**").authenticated()
