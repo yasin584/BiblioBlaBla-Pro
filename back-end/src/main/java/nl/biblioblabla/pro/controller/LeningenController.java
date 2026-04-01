@@ -21,6 +21,7 @@ public class LeningenController {
 
     private final LeningenRepository leningenRepository;
     private final UserRepository userRepository;
+    private final BeoordelingService beoordelingService;
 
     @GetMapping("/mijn-overzicht")
     public List<Lening> getMijnLeningen(
@@ -53,27 +54,22 @@ public class LeningenController {
         return leningenRepository.searchLeningen(huidigeGebruikerId, titel, genre, startDate, eindDate);
     }
 
-    // Voeg deze injectie toe aan je bestaande LeningenController
-    private final BeoordelingService beoordelingService;
-
     @PostMapping("/beoordeel/{leningId}")
-    public void rateLening(
-            @PathVariable int leningId,
-            @RequestParam int rating,
-            Principal principal) {
+    public String rateLening( // Verander 'void' naar 'String'
+                              @PathVariable int leningId,
+                              @RequestParam int rating,
+                              Principal principal) {
 
-        // 1. Controleer of de gebruiker is ingelogd
         if (principal == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        // 2. Haal de user veilig op via de email uit de Principal
         User user = userRepository.findByEmail(principal.getName());
-        if (user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
 
-        // 3. Voeg de beoordeling toe voor deze specifieke gebruiker
+        // Voer de beoordeling uit
         beoordelingService.verwerkBeoordeling(leningId, user.getId(), rating);
+
+        // Dit bericht zie je straks in het grote witte vlak van Insomnia
+        return "Succes! Je hebt dit boek een beoordeling van " + rating + " gegeven.";
     }
 }
