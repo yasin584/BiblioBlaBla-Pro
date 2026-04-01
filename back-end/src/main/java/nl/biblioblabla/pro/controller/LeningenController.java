@@ -5,6 +5,7 @@ import nl.biblioblabla.pro.model.Lening;
 import nl.biblioblabla.pro.model.User;
 import nl.biblioblabla.pro.repository.LeningenRepository;
 import nl.biblioblabla.pro.repository.UserRepository;
+import nl.biblioblabla.pro.service.BeoordelingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,8 +25,8 @@ public class LeningenController {
     @GetMapping("/mijn-overzicht")
     public List<Lening> getMijnLeningen(
             Principal principal,
-            @RequestParam(required = false) String q,
-            @RequestParam(required = false) String g,
+            @RequestParam(required = false) String titel,
+            @RequestParam(required = false) String genre,
             @RequestParam(required = false) String start,
             @RequestParam(required = false) String eind) {
 
@@ -49,6 +50,30 @@ public class LeningenController {
         LocalDate eindDate = (eind != null && !eind.isEmpty()) ? LocalDate.parse(eind) : null;
 
         // 4. Haal de gefilterde leningen op voor deze specifieke gebruiker
-        return leningenRepository.searchLeningen(huidigeGebruikerId, q, g, startDate, eindDate);
+        return leningenRepository.searchLeningen(huidigeGebruikerId, titel, genre, startDate, eindDate);
+    }
+
+    // Voeg deze injectie toe aan je bestaande LeningenController
+    private final BeoordelingService beoordelingService;
+
+    @PostMapping("/beoordeel/{leningId}")
+    public void rateLening(
+            @PathVariable int leningId,
+            @RequestParam int rating,
+            Principal principal) {
+
+        // 1. Controleer of de gebruiker is ingelogd
+        if (principal == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        // 2. Haal de user veilig op via de email uit de Principal
+        User user = userRepository.findByEmail(principal.getName());
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        // 3. Voeg de beoordeling toe voor deze specifieke gebruiker
+        beoordelingService.verwerkBeoordeling(leningId, user.getId(), rating);
     }
 }
