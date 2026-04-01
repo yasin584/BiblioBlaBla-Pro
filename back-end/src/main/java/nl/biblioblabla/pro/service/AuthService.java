@@ -1,21 +1,22 @@
 package nl.biblioblabla.pro.service;
 
-import lombok.RequiredArgsConstructor;
-import nl.biblioblabla.pro.dto.LoginRequest;
-import nl.biblioblabla.pro.dto.LoginResponse;
+import nl.biblioblabla.pro.model.LoginRequest;
+import nl.biblioblabla.pro.model.LoginResponse;
 import nl.biblioblabla.pro.model.User;
 import nl.biblioblabla.pro.repository.UserRepository;
 import nl.biblioblabla.pro.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor // Lombok verzorgt automatisch de dependency injection voor final fields
 public class AuthService {
     
-    // Geen @Autowired meer nodig, Lombok maakt de constructor
-    private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     // BCryptPasswordEncoder controleert of een plain-text wachtwoord overeenkomt met de hash
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -24,10 +25,10 @@ public class AuthService {
      hoofdmethode die het hele inlogproces coördineert
      LoginRequest request: Bevat de email en het wachtwoord van de frontend
      als inloggen lukt: returnt LoginResponse met JWT token en gebruikerId */
-    public LoginResponse login(LoginRequest request) {
+    public LoginResponse tryLogin(LoginRequest loginRequest) {
 
         // 1: Probeer de gebruiker in de database te vinden via EMAIL (niet username!)
-        User user = userRepository.findByEmail(request.getEmail());
+        User user = userRepository.findByEmail(loginRequest.getEmail());
         
         if (user == null) {
             // Geef nooit exact aan of het e-mailadres of het wachtwoord fout is (veiligheidsreden)
@@ -38,7 +39,7 @@ public class AuthService {
         // request.getWachtwoord() haalt plain-text op uit de DTO
         // user.getWachtwoordHash() haalt de opgeslagen hash op uit de DB
         boolean passwordMatches = passwordEncoder.matches(
-                request.getWachtwoord(),
+                loginRequest.getWachtwoord(),
                 user.getWachtwoordHash()
         );
 

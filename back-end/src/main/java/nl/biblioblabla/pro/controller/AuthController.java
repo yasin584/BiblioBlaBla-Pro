@@ -1,57 +1,30 @@
 package nl.biblioblabla.pro.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import nl.biblioblabla.pro.dto.LoginRequest;
-import nl.biblioblabla.pro.dto.LoginResponse;
+import nl.biblioblabla.pro.model.LoginRequest;
+import nl.biblioblabla.pro.model.LoginResponse;
 import nl.biblioblabla.pro.service.AuthService;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:8080")
-@RequiredArgsConstructor // Lombok regelt de dependency injection
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
-    
-    // Geen @Autowired nodig, gewoon private final
-    private final AuthService authService;
+
+    @Autowired
+    private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        try {
-            // Laat AuthService de logica afhandelen
-            LoginResponse response = authService.login(request);
+    public ResponseEntity<?> tryLogin(@RequestBody LoginRequest loginRequest) {
 
-            // Return HTTP 200 OK met de LoginResponse
-            return ResponseEntity.ok(response);
+            LoginResponse loginResponse = authService.tryLogin(loginRequest);
 
-        } catch (RuntimeException e) {
-            // Maak een foutmelding-object aan met de message uit de exception
-            AuthErrorResponse errorResponse = new AuthErrorResponse(e.getMessage());
-
-            // Return 401 Unauthorized (via de HttpStatus enum) met de JSON body
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            return ResponseEntity.ok(loginResponse);
         }
     }
-
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
-        // "Destroy" de huidige veiligheidscontext van dit verzoek
-        SecurityContextHolder.clearContext();
-        
-        // Stuur een bevestiging terug naar de frontend
-        return ResponseEntity.ok(new AuthErrorResponse("Succesvol uitgelogd.")); 
-        // (Tip: Misschien wil je AuthErrorResponse hernoemen naar MessageResponse of iets algemeners!)
-    }
-}
-
-@Data
-@AllArgsConstructor
-class AuthErrorResponse {
-    private String error;
-}
