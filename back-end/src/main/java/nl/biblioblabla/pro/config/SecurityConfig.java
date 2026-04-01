@@ -30,7 +30,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 // 2. CSRF uitzetten (niet nodig voor stateless JWT REST API's)
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
+//                .csrf(csrf -> csrf.disable())
 
                 // 3. Stateless sessies aanzetten (Spring mag de state niet onthouden, JWT doet dat)
                 .sessionManagement(session -> session
@@ -41,6 +42,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                     // Publieke endpoints
                     .requestMatchers("/user/login", "/user/register").permitAll()
+
+                        .requestMatchers("/user/logout").authenticated()
 
                     // Boeken
                     .requestMatchers(HttpMethod.GET, "/boeken/**").permitAll()

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-//@RequestMapping("/user")
+@RequestMapping("/user")
 @CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
