@@ -86,7 +86,7 @@ public class LeningenController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Je moet ingelogd zijn.");
         }
 
-        // 2. Validatie 
+        // 2. Validatie
         if (request.getTitel() == null || request.getTitel().length() < 3 || request.getTitel().length() > 30) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Titel moet tussen de 3 en 30 tekens zijn.");
         }
