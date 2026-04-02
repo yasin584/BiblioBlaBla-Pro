@@ -126,19 +126,19 @@ public class LeningenController {
     // SUGGESTIE ENDPOINTS (Voor de frontend autocomplete) ---
 
     @GetMapping("/suggesties/titels")
-    public List<String> getTitelSuggesties(@RequestParam String q) {
+    public List<String> getTitelSuggesties(@RequestParam String titel) {
         // q is de zoekterm die de gebruiker typt
-        return boekenRepository.searchTitels(q);
+        return boekenRepository.searchTitels(titel);
     }
 
     @GetMapping("/suggesties/auteurs")
-    public List<String> getAuteurSuggesties(@RequestParam String q) {
-        return auteursRepository.searchAuteurs(q);
+    public List<String> getAuteurSuggesties(@RequestParam String auteur) {
+        return auteursRepository.searchAuteurs(auteur);
     }
 
     @GetMapping("/check-genre")
-    public String getGenreVoorTitel(@RequestParam String titel) {
-        String genre = boekenRepository.findGenreByTitel(titel);
+    public String getGenreVoorTitel(@RequestParam String titelBoek) {
+        String genre = boekenRepository.findGenreByTitel(titelBoek);
         if (genre == null) {
             // We sturen een lege string of 404 als het boek nieuw is
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Boek onbekend");
