@@ -1,12 +1,12 @@
 package nl.biblioblabla.pro.service;
 
 import nl.biblioblabla.pro.repository.BeoordelingRepository;
+import nl.biblioblabla.pro.exception.OngeldigeRatingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,24 +22,23 @@ public class BeoordelingServiceTest {
     private BeoordelingService sut; // System Under Test
 
     @Test
-    void verwerkBeoordeling_MetRatingHogerDanVijf_GooitBadRequest() {
+    void verwerkBeoordeling_MetRatingHogerDanVijf_GooitException() {
         // ARRANGE
-        // We bereiden de testdata voor (expected)
         int leningId = 9;
         int gebruikerId = 6;
         int teHogeRating = 7;
         String expectedMessage = "Rating moet tussen 1 en 5 liggen.";
 
-        //  ACT & ASSERT
-        ResponseStatusException actual = assertThrows(ResponseStatusException.class, () -> {
-            sut.verwerkBeoordeling(leningId, gebruikerId, teHogeRating);
-        });
+        // ACT & ASSERT
+        OngeldigeRatingException actual = assertThrows(
+                OngeldigeRatingException.class,
+                () -> sut.verwerkBeoordeling(leningId, gebruikerId, teHogeRating)
+        );
 
-        // We controleren of de 'actual' waarden overeenkomen met de 'expected' waarden
-        assertEquals(400, actual.getStatusCode().value());
-        assertEquals(expectedMessage, actual.getReason());
+        // ASSERT
+        assertEquals(expectedMessage, actual.getMessage());
 
-        // Monitoring van de kernlogica: we bewijzen dat de repository NOOIT wordt aangeroepen bij een foutieve rating
+        // controleren dat repository niet wordt aangeroepen
         verifyNoInteractions(beoordelingRepository);
     }
 }

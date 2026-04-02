@@ -47,8 +47,8 @@ public class LeningenController {
         int huidigeGebruikerId = user.getId();
 
         // 3. Parsen van datums met extra check op lege strings
-        LocalDate startDate = (start != null && !start.isEmpty()) ? LocalDate.parse(start) : null;
-        LocalDate eindDate = (eind != null && !eind.isEmpty()) ? LocalDate.parse(eind) : null;
+        LocalDate startDate = (start != null && !start.isBlank()) ? LocalDate.parse(start) : null;
+        LocalDate eindDate = (eind != null && !eind.isBlank()) ? LocalDate.parse(eind) : null;
 
         // 4. Haal de gefilterde leningen op voor deze specifieke gebruiker
         return leningenRepository.searchLeningen(huidigeGebruikerId, titel, genre, startDate, eindDate);
