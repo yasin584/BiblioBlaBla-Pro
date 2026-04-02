@@ -83,4 +83,17 @@ public class LeningenRepository {
 
         return jdbcTemplate.query(sql.toString(), loanRowMapper, params.toArray());
     }
+
+    public void saveLening(int gebruikerId, int boekId, LocalDate inleverdatum) {
+        String sql = "INSERT INTO leningen (gebruiker_id, boek_id, uitleendatum, inleverdatum, is_ingeleverd) " +
+                "VALUES (?, ?, ?, ?, ?)";
+
+        jdbcTemplate.update(sql,
+                gebruikerId,
+                boekId,
+                LocalDate.now(), // Vandaag is de uitleendatum
+                inleverdatum,
+                false            // Boek is nog niet ingeleverd
+        );
+    }
 }

@@ -41,7 +41,7 @@ public class SecurityConfig {
                 // 4. Autorisatie regels
                 .authorizeHttpRequests(auth -> auth
                     // Publieke endpoints
-                    .requestMatchers("/user/login", "/user/register").permitAll()
+                    .requestMatchers("/auth/login", "/auth/register").permitAll()
 
                     // Boeken
                     .requestMatchers(HttpMethod.GET, "/boeken/**").permitAll()
