@@ -29,5 +29,9 @@ public class BeoordelingService {
                     "Je kunt alleen je eigen leningen beoordelen."
             );
         }
+
+        //Als het opslaan is gelukt, update dan het gemiddelde
+        // We geven leningId mee zodat de StatistiekService weet welk boek berekend moet worden
+        statistiekService.actualiseerBoekRating(leningId);
     }
 }
