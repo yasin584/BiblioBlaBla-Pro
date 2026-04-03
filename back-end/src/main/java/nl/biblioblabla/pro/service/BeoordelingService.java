@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class BeoordelingService {
 
     private final BeoordelingRepository beoordelingRepository;
+    private final StatistiekService statistiekService;
 
     public void verwerkBeoordeling(int leningId, int gebruikerId, int rating) {
 
@@ -29,5 +30,9 @@ public class BeoordelingService {
                     "Je kunt alleen je eigen leningen beoordelen."
             );
         }
+
+        //Als het opslaan is gelukt, update dan het gemiddelde
+        // We geven leningId mee zodat de StatistiekService weet welk boek berekend moet worden
+        statistiekService.actualiseerBoekRating(leningId);
     }
 }
