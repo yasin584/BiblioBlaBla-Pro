@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class BeoordelingService {
 
     private final BeoordelingRepository beoordelingRepository;
+    private final StatistiekService statistiekService;
 
     public void verwerkBeoordeling(int leningId, int gebruikerId, int rating) {
 

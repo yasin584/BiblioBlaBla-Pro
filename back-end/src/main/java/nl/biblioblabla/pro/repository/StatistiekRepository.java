@@ -1,6 +1,7 @@
 package nl.biblioblabla.pro.repository;
 
 import lombok.RequiredArgsConstructor;
+import nl.biblioblabla.pro.exception.GenreNietBekendException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -36,7 +37,7 @@ public class StatistiekRepository {
         try {
             return jdbcTemplate.queryForObject(sql, String.class, gebruikerId);
         } catch (Exception e) {
-            return "Nog geen genres bekend";
+            throw new GenreNietBekendException("Nog geen genres bekend voor gebruiker " + gebruikerId);
         }
     }
 

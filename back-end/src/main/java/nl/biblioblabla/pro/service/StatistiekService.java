@@ -23,11 +23,11 @@ public class StatistiekService {
         return stats;
     }
 
-    public void actualiseerBoekRating(int leningId) { // We ontvangen de leningId
-        // 1. Zoek eerst op welk boek bij deze lening hoort
+    public void actualiseerBoekRating(int leningId) {
+        // 1. Zoek eerst het boekId op dat bij deze lening hoort
         int boekId = statistiekRepository.getBoekIdBijLening(leningId);
 
-        // 2. Bereken nu pas het gemiddelde voor DAT specifieke boekId
+        // 2. Bereken het gemiddelde voor dat specifieke boek
         Double nieuwGemiddelde = statistiekRepository.berekenGemiddeldeVoorBoek(boekId);
 
         if (nieuwGemiddelde != null) {

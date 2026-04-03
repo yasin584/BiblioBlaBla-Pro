@@ -1,4 +1,8 @@
 package nl.biblioblabla.pro.exception;
 
-public class GenreNietBekendException {
+// simpele unchecked exception
+public class GenreNietBekendException extends RuntimeException {
+    public GenreNietBekendException(String message) {
+        super(message);
+    }
 }

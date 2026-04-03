@@ -12,15 +12,26 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/stats")
+@RequestMapping("/leningen/stats")
 @RequiredArgsConstructor
 public class StatistiekController {
+
     private final StatistiekService statistiekService;
     private final UserRepository userRepository;
 
-    @GetMapping("/mij")
+    @GetMapping("/mij")  // endpoint: GET /leningen/stats/mij
     public GebruikerStats getMijnStats(Principal principal) {
-        User user = userRepository.findByEmail(principal.getName());
-        return statistiekService.getGebruikerDashboard(user.getId());
+
+        //Haal de email van de ingelogde gebruiker op via principal
+        String email = principal.getName();
+
+        //Zoekt de gebruiker in de database
+        User user = userRepository.findByEmail(email);
+
+        //Vraag de statistieken op via de service laag
+        GebruikerStats stats = statistiekService.getGebruikerDashboard(user.getId());
+
+        //Geef de statistieken terug aan de client
+        return stats;
     }
 }
