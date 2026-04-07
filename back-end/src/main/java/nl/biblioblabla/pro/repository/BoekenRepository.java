@@ -16,7 +16,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class BoekenRepository {
 
-    // Dit veld was nog niet gedeclareerd, vandaar de 'Cannot resolve symbol'
+
     private final JdbcTemplate jdbcTemplate;
 
     public Integer getOrCreateBoek(String titel, String genre, int auteurId) {
@@ -27,7 +27,6 @@ public class BoekenRepository {
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
             jdbcTemplate.update(connection -> {
-                // Zorg dat de import 'java.sql.PreparedStatement' aanwezig is
                 PreparedStatement ps = connection.prepareStatement(
                         "INSERT INTO boeken (titel, genre, auteur_id) VALUES (?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
@@ -37,7 +36,6 @@ public class BoekenRepository {
                 return ps;
             }, keyHolder);
 
-            // Objects.requireNonNull voorkomt de NullPointerException waarschuwing op .getKey()
             return Objects.requireNonNull(keyHolder.getKey()).intValue();
         }
     }
@@ -48,14 +46,11 @@ public class BoekenRepository {
     }
 
     public String findGenreByTitel(String titel) {
-        // De afsluitende " na de puntkomma ontbrak
         String sql = "SELECT genre FROM boeken WHERE titel = ? LIMIT 1";
 
         try {
             return jdbcTemplate.queryForObject(sql, String.class, titel);
         } catch (EmptyResultDataAccessException e) {
-            // Als het boek niet bestaat, geven we null terug zodat de frontend
-            // weet dat de gebruiker zelf tekst moet invoeren.
             return null;
         }
     }

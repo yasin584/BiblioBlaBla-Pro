@@ -41,7 +41,7 @@ public class LeningenController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Je moet ingelogd zijn.");
         }
 
-        // 2. Haal de email op uit de Principal en zoek de User in de database
+        // 2. Haal de email op uit en zoek de User in de database
         String email = principal.getName();
         User user = userRepository.findByEmail(email);
 
