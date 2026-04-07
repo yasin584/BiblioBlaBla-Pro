@@ -9,10 +9,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository  // Spring herkent dit als data-access component
+@Repository
 public class LeningenRepository {
 
-    private final JdbcTemplate jdbcTemplate;  // hulpmiddel om SQL queries uit te voeren
+    private final JdbcTemplate jdbcTemplate;
 
     // Constructor injectie van JdbcTemplate
     public LeningenRepository(JdbcTemplate jdbcTemplate) {
@@ -51,7 +51,6 @@ public class LeningenRepository {
         return loan;  // RowMapper retourneert een Lening object
     };
 
-    //
     private final String JOIN_QUERY =
             "SELECT l.*, b.titel, b.genre, b.gemiddelde_beoordeling, a.naam AS auteur_naam " +
                     "FROM leningen l " +
@@ -72,7 +71,7 @@ public class LeningenRepository {
 
         // Bouw SQL statement op basis van filters
         StringBuilder sql = new StringBuilder(JOIN_QUERY);
-        sql.append(" WHERE l.gebruiker_id = ?");  // altijd filteren op gebruiker
+        sql.append(" WHERE l.gebruiker_id = ?");
 
         List<Object> params = new ArrayList<>();
         params.add(gebruikerId);

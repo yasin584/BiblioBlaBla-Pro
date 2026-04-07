@@ -16,15 +16,14 @@ public class JwtUtil {
     private final SecretKey secretKey;
     private final long EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 24 uur
 
-    // Spring haalt de secret uit je application.properties
+    // Spring haalt de secretKey uit je application.properties
     public JwtUtil(@Value("${jwt.secret}") String secret) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    // Aangepast naar 'email' in plaats van 'username'
     public String generateToken(String email, int userId) {
         return Jwts.builder()
-                .subject(email) // De 'sub' claim is nu het e-mailadres
+                .subject(email)
                 .claim("userId", userId)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
@@ -49,7 +48,6 @@ public class JwtUtil {
         }
     }
 
-    // -- Hulpmethode --
     // Dit voorkomt dat we de parse-logica 3 keer moeten uittypen (DRY principe)
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
