@@ -9,9 +9,11 @@ import nl.biblioblabla.pro.repository.BoekenRepository;
 import nl.biblioblabla.pro.repository.LeningenRepository;
 import nl.biblioblabla.pro.repository.UserRepository;
 import nl.biblioblabla.pro.service.BeoordelingService;
+import nl.biblioblabla.pro.service.LeningService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -27,6 +29,21 @@ public class LeningenController {
     private final BeoordelingService beoordelingService;
     private final AuteursRepository auteursRepository;
     private final BoekenRepository boekenRepository;
+    private final LeningService leningService;
+
+    private User getCurrentUser(Principal principal) {
+        if (principal == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Je moet ingelogd zijn.");
+        }
+
+        User user = userRepository.findByEmail(principal.getName());
+
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Gebruiker niet gevonden.");
+        }
+
+        return user;
+    }
 
     @GetMapping("/mijn-overzicht")
     public List<Lening> getMijnLeningen(
@@ -81,42 +98,10 @@ public class LeningenController {
     @PostMapping("/lenen")
     @ResponseStatus(HttpStatus.CREATED)
     public String createLening(@RequestBody LeningRequest request, Principal principal) {
-        // Controleer of de gebruiker is ingelogd
-        if (principal == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Je moet ingelogd zijn.");
-        }
 
-        // Validatie
-        if (request.getTitel() == null || request.getTitel().length() < 3 || request.getTitel().length() > 30) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Titel moet tussen de 3 en 30 tekens zijn.");
-        }
+        User user = getCurrentUser(principal);
 
-        if (request.getAuteur() == null || request.getAuteur().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Auteur is verplicht.");
-        }
-
-        if (request.getGenre() == null || request.getGenre().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Genre is verplicht.");
-        }
-
-        if (request.getInleverdatum() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Inleverdatum is verplicht.");
-        }
-
-        // Haal de gebruiker op
-        User user = userRepository.findByEmail(principal.getName());
-        if (user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Gebruiker niet gevonden.");
-        }
-
-        // Haal auteur op of maak aan
-        int auteurId = auteursRepository.getOrCreateAuteur(request.getAuteur());
-
-        // Haal boek op of maak aan
-        int boekId = boekenRepository.getOrCreateBoek(request.getTitel(), request.getGenre(), auteurId);
-
-        // De lening opslaan in de database
-        leningenRepository.saveLening(user.getId(), boekId, request.getInleverdatum());
+        leningService.createLening(user.getId(), request);
 
         return "Lening voor '" + request.getTitel() + "' succesvol geregistreerd!";
     }
