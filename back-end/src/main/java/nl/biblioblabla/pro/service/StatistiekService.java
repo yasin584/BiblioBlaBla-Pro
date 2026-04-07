@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 public class StatistiekService {
     private final StatistiekRepository statistiekRepository;
 
-    public GebruikerStats getGebruikerDashboard(int gebruikerId) {
+    //verzamelt statistieken over een gebruiker aantal boeken / populairste genre
+    public GebruikerStats getGebruikerBoeken(int gebruikerId) {
         GebruikerStats stats = new GebruikerStats();
 
         // Totaal aantal geleende boeken ophalen
@@ -23,6 +24,7 @@ public class StatistiekService {
         return stats;
     }
 
+    //gemiddelde boekbeoordelingen op halen
     public void actualiseerBoekRating(int leningId) {
         // Zoek eerst het boekId op dat bij deze lening hoort
         int boekId = statistiekRepository.getBoekIdBijLening(leningId);

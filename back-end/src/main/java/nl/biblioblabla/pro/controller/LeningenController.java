@@ -30,7 +30,7 @@ public class LeningenController {
 
     @GetMapping("/mijn-overzicht")
     public List<Lening> getMijnLeningen(
-            Principal principal,
+            Principal principal, //object dat Spring je geeft om te weten wie er is ingelogd
             @RequestParam(required = false) String titel,
             @RequestParam(required = false) String genre,
             @RequestParam(required = false) String start,
@@ -46,14 +46,23 @@ public class LeningenController {
         User user = userRepository.findByEmail(email);
 
         if (user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Gebruiker niet gevonden.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Gebruiker niet gevonden."); //terug geeft (HTTP 404)
         }
 
         int huidigeGebruikerId = user.getId();
 
         // Parsen van datums met extra check op lege strings
-        LocalDate startDate = (start != null && !start.isBlank()) ? LocalDate.parse(start) : null;
-        LocalDate eindDate = (eind != null && !eind.isBlank()) ? LocalDate.parse(eind) : null;
+        LocalDate startDate = null;
+        if (start != null && !start.isBlank())  {
+            startDate = LocalDate.parse(start);
+        }
+
+        //isBlank() Java String controleert of een string leeg is of alleen uit witruimtes bestaat.
+
+        LocalDate eindDate = null;
+        if (eind != null && !eind.isBlank()) {
+            eindDate = LocalDate.parse(eind);
+        }
 
         // Haal de gefilterde leningen op voor deze specifieke gebruiker
         return leningenRepository.searchLeningen(huidigeGebruikerId, titel, genre, startDate, eindDate);
@@ -69,12 +78,11 @@ public class LeningenController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        User user = userRepository.findByEmail(principal.getName());
+        User user = userRepository.findByEmail(principal.getName()); //geeft de email van de ingelogde gebruiker
 
         // Voer de beoordeling uit
         beoordelingService.verwerkBeoordeling(leningId, user.getId(), rating);
 
-        // Dit bericht zie je straks in het grote witte vlak van Insomnia
         return "Succes! Je hebt dit boek een beoordeling van " + rating + " gegeven.";
     }
 

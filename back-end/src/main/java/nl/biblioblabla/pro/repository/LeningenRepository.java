@@ -79,9 +79,9 @@ public class LeningenRepository {
         // Zoekterm filter (titel of auteur)
         if (query != null && !query.isEmpty()) {
             sql.append(" AND (b.titel LIKE ? OR a.naam LIKE ?)");
-            String fuzzy = "%" + query + "%";  // % = wildcard voor LIKE
-            params.add(fuzzy);
-            params.add(fuzzy);
+            String zoek = "%" + query + "%";  // % = wildcard voor LIKE
+            params.add(zoek);
+            params.add(zoek);
         }
 
         // Genre filter

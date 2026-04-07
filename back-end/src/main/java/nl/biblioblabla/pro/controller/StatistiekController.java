@@ -29,7 +29,7 @@ public class StatistiekController {
         User user = userRepository.findByEmail(email);
 
         //Vraag de statistieken op via de service laag
-        GebruikerStats stats = statistiekService.getGebruikerDashboard(user.getId());
+        GebruikerStats stats = statistiekService.getGebruikerBoeken(user.getId());
 
         //Geef de statistieken terug aan de client
         return stats;
