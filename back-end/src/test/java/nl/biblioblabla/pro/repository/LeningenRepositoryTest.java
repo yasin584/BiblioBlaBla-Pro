@@ -91,4 +91,29 @@ public class LeningenRepositoryTest {
 
         assertEquals("Database fout", exception.getMessage());
     }
+
+    @Test
+    void saveLening_GeldigeData_RoeptJdbcTemplateAan() {
+        // ARRANGE
+        int gebruikerId = 10;
+        int boekId = 50;
+        LocalDate inleverdatum = LocalDate.now().plusDays(21);
+
+        // De SQL-string die we verwachten (moet exact overeenkomen met de code)
+        String expectedSql = "INSERT INTO leningen (gebruiker_id, boek_id, uitleendatum, inleverdatum, is_ingeleverd) VALUES (?, ?, ?, ?, ?)";
+
+        // ACT
+        sut.saveLening(gebruikerId, boekId, inleverdatum);
+
+        // ASSERT
+        // We verifiëren of de update methode is aangeroepen met de juiste argumenten
+        verify(jdbcTemplate).update(
+                eq(expectedSql),
+                eq(gebruikerId),
+                eq(boekId),
+                any(LocalDate.class), // We gebruiken any() voor de 'uitleendatum' omdat dit LocalDate.now() is
+                eq(inleverdatum),
+                eq(false)
+        );
+    }
 }
