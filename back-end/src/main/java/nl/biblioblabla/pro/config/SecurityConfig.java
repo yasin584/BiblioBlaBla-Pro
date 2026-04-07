@@ -18,7 +18,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor // Lombok verzorgt de constructor voor jwtAuthenticationFilter
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -31,7 +31,6 @@ public class SecurityConfig {
 
                 // 2. CSRF uitzetten (niet nodig voor stateless JWT REST API's)
                 .csrf(AbstractHttpConfigurer::disable)
-//                .csrf(csrf -> csrf.disable())
 
                 // 3. Stateless sessies aanzetten (Spring mag de state niet onthouden, JWT doet dat)
                 .sessionManagement(session -> session
@@ -72,7 +71,7 @@ public class SecurityConfig {
         // React frontend toestaan
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
         
-        // Alle HTTP methodes toestaan
+        // HTTP methodes toestaan
         configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "OPTIONS"));
         
         // Alle headers toestaan

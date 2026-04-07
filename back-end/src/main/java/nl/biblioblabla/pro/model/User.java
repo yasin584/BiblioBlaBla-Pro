@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor // Vervangt jouw handgeschreven constructor
+@AllArgsConstructor
 public class User {
 
     private int id;
