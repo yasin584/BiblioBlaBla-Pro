@@ -1,5 +1,6 @@
 package nl.biblioblabla.pro.service;
 
+import nl.biblioblabla.pro.exception.InvalidCredentialsException;
 import nl.biblioblabla.pro.model.LoginRequest;
 import nl.biblioblabla.pro.model.LoginResponse;
 import nl.biblioblabla.pro.model.User;
@@ -31,7 +32,7 @@ public class AuthService {
         User user = userRepository.findByEmail(loginRequest.getEmail());
         
         if (user == null) {
-            throw new RuntimeException("Ongeldig e-mailadres of wachtwoord");
+            throw new InvalidCredentialsException("Ongeldig e-mailadres of wachtwoord");
         }
 
         // Verifieer het wachtwoord
@@ -41,7 +42,7 @@ public class AuthService {
         );
 
         if (!passwordMatches) {
-            throw new RuntimeException("Ongeldig e-mailadres of wachtwoord");
+            throw new InvalidCredentialsException("Ongeldig e-mailadres of wachtwoord");
         }
 
         // Als wachtwoord klopt genereer JWT token
