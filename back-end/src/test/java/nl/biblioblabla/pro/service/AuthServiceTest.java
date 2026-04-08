@@ -34,14 +34,13 @@ class AuthServiceTest {
         // Arrange
         String email = "test@email.com";
         String wachtwoord = "testPassword";
-        // We maken een hash die we in de 'database' stoppen
+        // We maken een hash die we in de database stoppen
         String hashedWachtwoord = passwordEncoder.encode(wachtwoord);
         int gebruikerId = 1;
         String expectedToken = "fake-jwt-token";
 
         LoginRequest loginRequest = new LoginRequest(email, wachtwoord);
 
-        // Let op: id is een int, dus 1 ipv "1"
         User testUser = new User(gebruikerId, "Fleur", email, hashedWachtwoord);
 
         // Vertel de mocks wat ze moeten doen
@@ -76,7 +75,7 @@ class AuthServiceTest {
 
         assertEquals("Ongeldig e-mailadres of wachtwoord", exception.getMessage());
 
-        // Verifieer dat er NOOIT een token is gegenereerd
+        // Verifieer dat er nooit een token is gegenereerd
         verify(jwtUtil, never()).generateToken(anyString(), anyInt());
     }
 
@@ -87,7 +86,7 @@ class AuthServiceTest {
         String correctWachtwoord = "geheim123";
         String foutWachtwoord = "foutjeBedankt";
 
-        // De hash in de 'database' is van het GOEDE wachtwoord
+        // De hash in de database is van het GOEDE wachtwoord
         String hashInDb = passwordEncoder.encode(correctWachtwoord);
         User testUser = new User(1, "Fleur", email, hashInDb);
 
