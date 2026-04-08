@@ -10,11 +10,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class UserRepository {
-    
-    // Lombok zorgt automatisch voor de constructor en dependency injection
+
     private final JdbcTemplate jdbcTemplate;
 
-    // Deze RowMapper vertaalt een rij uit de 'gebruikers' tabel naar jouw User object
+    // Deze RowMapper vertaalt een rij uit de gebruikers tabel naar User object
     private final RowMapper<User> userRowMapper = (rs, rowNum) -> {
         User user = new User();
         user.setId(rs.getInt("id")); 
@@ -30,17 +29,17 @@ public class UserRepository {
         try {
             return jdbcTemplate.queryForObject(sql, userRowMapper, email);
         } catch (EmptyResultDataAccessException e) {
-            return null; // Geeft null terug als het e-mailadres niet bestaat
+            return null;
         }
     }
 
-    // Zoeken op ID (handig voor het ophalen van gebruikersprofielen)
+    // Zoeken op ID
     public User findById(long id) {
         String sql = "SELECT * FROM gebruikers WHERE id = ?";
         try {
             return jdbcTemplate.queryForObject(sql, userRowMapper, id);
         } catch (EmptyResultDataAccessException e) {
-            return null; // Geeft null terug als de ID niet bestaat
+            return null;
         }
     }
 }

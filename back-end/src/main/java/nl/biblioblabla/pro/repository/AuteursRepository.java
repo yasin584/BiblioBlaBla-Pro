@@ -26,7 +26,6 @@ public class AuteursRepository {
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
             jdbcTemplate.update(connection -> {
-                // De "prepareStatement" error komt vaak door missende imports van java.sql
                 PreparedStatement ps = connection.prepareStatement(
                         "INSERT INTO auteurs (naam) VALUES (?)",
                         Statement.RETURN_GENERATED_KEYS);
@@ -34,7 +33,6 @@ public class AuteursRepository {
                 return ps;
             }, keyHolder);
 
-            // Gebruik Objects.requireNonNull om de NullPointerException waarschuwing op te lossen
             return Objects.requireNonNull(keyHolder.getKey()).intValue();
         }
     }

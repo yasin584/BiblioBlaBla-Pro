@@ -16,7 +16,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class BoekenRepository {
 
-
     private final JdbcTemplate jdbcTemplate;
 
     public Integer getOrCreateBoek(String titel, String genre, int auteurId) {
@@ -51,6 +50,8 @@ public class BoekenRepository {
         try {
             return jdbcTemplate.queryForObject(sql, String.class, titel);
         } catch (EmptyResultDataAccessException e) {
+            // Als het boek niet bestaat, geven we null terug zodat de frontend
+            // weet dat de gebruiker zelf tekst moet invoeren
             return null;
         }
     }

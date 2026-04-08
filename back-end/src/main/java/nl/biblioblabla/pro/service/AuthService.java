@@ -1,5 +1,6 @@
 package nl.biblioblabla.pro.service;
 
+import nl.biblioblabla.pro.exception.InvalidCredentialsException;
 import nl.biblioblabla.pro.model.LoginRequest;
 import nl.biblioblabla.pro.model.LoginResponse;
 import nl.biblioblabla.pro.model.User;
@@ -27,30 +28,27 @@ public class AuthService {
      als inloggen lukt: returnt LoginResponse met JWT token en gebruikerId */
     public LoginResponse tryLogin(LoginRequest loginRequest) {
 
-        // 1: Probeer de gebruiker in de database te vinden via EMAIL (niet username!)
+        // Gebruiker vinden via email
         User user = userRepository.findByEmail(loginRequest.getEmail());
         
         if (user == null) {
-            // Geef nooit exact aan of het e-mailadres of het wachtwoord fout is (veiligheidsreden)
-            throw new RuntimeException("Ongeldig e-mailadres of wachtwoord");
+            throw new InvalidCredentialsException("Ongeldig e-mailadres of wachtwoord");
         }
 
-        // 2: Verifieer het wachtwoord
-        // request.getWachtwoord() haalt plain-text op uit de DTO
-        // user.getWachtwoordHash() haalt de opgeslagen hash op uit de DB
+        // Verifieer het wachtwoord
         boolean passwordMatches = passwordEncoder.matches(
                 loginRequest.getWachtwoord(),
                 user.getWachtwoordHash()
         );
 
         if (!passwordMatches) {
-            throw new RuntimeException("Ongeldig e-mailadres of wachtwoord");
+            throw new InvalidCredentialsException("Ongeldig e-mailadres of wachtwoord");
         }
 
-        // 3: Als wachtwoord klopt: genereer JWT token
+        // Als wachtwoord klopt genereer JWT token
         String token = jwtUtil.generateToken(user.getEmail(), user.getId());
 
-        // 4: Maak en retourneer LoginResponse (bevat token en gebruikerId voor React)
+        // Maak en retourneer LoginResponse (bevat token en gebruikerId voor React)
         return new LoginResponse(token, user.getId());
     }
 }

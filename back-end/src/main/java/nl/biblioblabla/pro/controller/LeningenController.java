@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/leningen")
-@RequiredArgsConstructor // Genereert automatisch de constructor voor de repositories
+@RequiredArgsConstructor
 public class LeningenController {
 
     private final LeningenRepository leningenRepository;
@@ -36,12 +36,12 @@ public class LeningenController {
             @RequestParam(required = false) String start,
             @RequestParam(required = false) String eind) {
 
-        // 1. Controleer of de gebruiker is ingelogd
+        // Controleer of de gebruiker is ingelogd
         if (principal == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Je moet ingelogd zijn.");
         }
 
-        // 2. Haal de email op uit en zoek de User in de database
+        // Haal de email op uit de Principal en zoek de User in de database
         String email = principal.getName();
         User user = userRepository.findByEmail(email);
 
@@ -51,16 +51,16 @@ public class LeningenController {
 
         int huidigeGebruikerId = user.getId();
 
-        // 3. Parsen van datums met extra check op lege strings
+        // Parsen van datums met extra check op lege strings
         LocalDate startDate = (start != null && !start.isBlank()) ? LocalDate.parse(start) : null;
         LocalDate eindDate = (eind != null && !eind.isBlank()) ? LocalDate.parse(eind) : null;
 
-        // 4. Haal de gefilterde leningen op voor deze specifieke gebruiker
+        // Haal de gefilterde leningen op voor deze specifieke gebruiker
         return leningenRepository.searchLeningen(huidigeGebruikerId, titel, genre, startDate, eindDate);
     }
 
     @PostMapping("/beoordeel/{leningId}")
-    public String rateLening( // Verander 'void' naar 'String'
+    public String rateLening(
                               @PathVariable int leningId,
                               @RequestParam int rating,
                               Principal principal) {
@@ -81,12 +81,12 @@ public class LeningenController {
     @PostMapping("/lenen")
     @ResponseStatus(HttpStatus.CREATED)
     public String createLening(@RequestBody LeningRequest request, Principal principal) {
-        // 1. Controleer of de gebruiker is ingelogd
+        // Controleer of de gebruiker is ingelogd
         if (principal == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Je moet ingelogd zijn.");
         }
 
-        // 2. Validatie
+        // Validatie
         if (request.getTitel() == null || request.getTitel().length() < 3 || request.getTitel().length() > 30) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Titel moet tussen de 3 en 30 tekens zijn.");
         }
@@ -103,31 +103,27 @@ public class LeningenController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Inleverdatum is verplicht.");
         }
 
-        // 3. Haal de gebruiker op
+        // Haal de gebruiker op
         User user = userRepository.findByEmail(principal.getName());
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Gebruiker niet gevonden.");
         }
 
-        // 4. Gebruik de repositories (Hierdoor verdwijnen de 'never used' meldingen!)
         // Haal auteur op of maak aan
         int auteurId = auteursRepository.getOrCreateAuteur(request.getAuteur());
 
         // Haal boek op of maak aan
         int boekId = boekenRepository.getOrCreateBoek(request.getTitel(), request.getGenre(), auteurId);
 
-        // 5. De lening opslaan in de database
-        // Hiervoor roepen we de nieuwe methode in LeningenRepository aan (zie stap hieronder)
+        // De lening opslaan in de database
         leningenRepository.saveLening(user.getId(), boekId, request.getInleverdatum());
 
         return "Lening voor '" + request.getTitel() + "' succesvol geregistreerd!";
     }
 
-    // SUGGESTIE ENDPOINTS (Voor de frontend autocomplete) ---
 
     @GetMapping("/suggesties/titels")
     public List<String> getTitelSuggesties(@RequestParam String titel) {
-        // q is de zoekterm die de gebruiker typt
         return boekenRepository.searchTitels(titel);
     }
 

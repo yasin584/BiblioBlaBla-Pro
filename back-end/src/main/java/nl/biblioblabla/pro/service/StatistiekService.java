@@ -13,10 +13,10 @@ public class StatistiekService {
     public GebruikerStats getGebruikerDashboard(int gebruikerId) {
         GebruikerStats stats = new GebruikerStats();
 
-        // 1. Totaal aantal geleende boeken ophalen
+        // Totaal aantal geleende boeken ophalen
         stats.setTotaalGeleend(statistiekRepository.getTotaalGeleend(gebruikerId));
 
-        // 2. Populairste genre ophalen (voeg deze regel toe)
+        // Populairste genre ophalen (voeg deze regel toe)
         String populairste = statistiekRepository.getPopulairsteGenre(gebruikerId);
         stats.setPopulairsteGenre(populairste);
 
@@ -24,10 +24,10 @@ public class StatistiekService {
     }
 
     public void actualiseerBoekRating(int leningId) {
-        // 1. Zoek eerst het boekId op dat bij deze lening hoort
+        // Zoek eerst het boekId op dat bij deze lening hoort
         int boekId = statistiekRepository.getBoekIdBijLening(leningId);
 
-        // 2. Bereken het gemiddelde voor dat specifieke boek
+        // Bereken het gemiddelde voor dat specifieke boek
         Double nieuwGemiddelde = statistiekRepository.berekenGemiddeldeVoorBoek(boekId);
 
         if (nieuwGemiddelde != null) {
