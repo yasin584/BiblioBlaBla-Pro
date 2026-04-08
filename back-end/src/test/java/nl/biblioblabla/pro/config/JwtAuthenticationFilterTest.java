@@ -146,7 +146,7 @@ class JwtAuthenticationFilterTest {
     // Lege Authorization header
 
     @Test
-    @DisplayName("Lege Authorization header → filter gaat door, geen authenticatie")
+    @DisplayName("Lege Authorization header filter gaat door, geen authenticatie")
     void legeAuthorizationHeader_gaatDoor() throws ServletException, IOException {
         when(request.getHeader("Authorization")).thenReturn("");
 
