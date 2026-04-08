@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./components/Login";
+import Login from "./Login";
 //import Leesgeschiedenis from "./leesgeschiedenis"; 
 import ProtectedRoute from "./components/Protectedrout";
 

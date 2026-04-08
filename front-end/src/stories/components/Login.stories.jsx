@@ -1,21 +1,23 @@
-import Login from "../../components/Login.jsx";
+ import Login from '../../Login.jsx';
 import axios from "axios";
 import { expect, within, userEvent, waitFor } from "storybook/test";
+import '../../index.css';
+
 
 export default {
   title: "Pages/Login",
   component: Login,
   parameters: {
-    layout: "centered",
+    layout: "fullscreen", // Gebruik fullscreen voor de juiste Tailwind weergave
   },
 };
 
+// De centrale mock functie
 const mockAxios = (status = 200, response = {}) => {
   axios.post = async () => {
     if (status !== 200) {
       throw new Error("Request failed");
     }
-
     return {
       status,
       data: response,
@@ -23,8 +25,7 @@ const mockAxios = (status = 200, response = {}) => {
   };
 };
 
-export const Default = {};
-
+// 1. Succes story
 export const SuccesvolleLogin = {
   render: () => {
     mockAxios(200, { token: "fake-token" });
@@ -32,20 +33,28 @@ export const SuccesvolleLogin = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    await userEvent.type(await canvas.findByLabelText(/email/i), "test@mail.com");
+    await userEvent.type(await canvas.findByLabelText(/wachtwoord/i), "1234");
+    await userEvent.click(await canvas.findByRole("button", { name: /inloggen/i }));
 
-    const emailInput = await canvas.findByLabelText(/email/i);
-    const passwordInput = await canvas.findByLabelText(/wachtwoord/i);
-    const loginButton = await canvas.findByRole("button", {
-      name: /inloggen/i,
+    await waitFor(() => expect(localStorage.getItem("token")).toBe("fake-token"));
+  },
+};
+
+// 2. Foutmelding story:
+export const VerkeerdeInloggegevens = {
+  render: () => {
+    mockAxios(401); // Geen data nodig, de catch in Login.jsx handelt het af
+    return <Login />;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(await canvas.findByLabelText(/email/i), "verkeerd@mail.com");
+    await userEvent.type(await canvas.findByLabelText(/wachtwoord/i), "fout");
+    await userEvent.click(await canvas.findByRole("button", { name: /inloggen/i }));
+
+    await waitFor(() => {
+      expect(canvas.getByText(/gebruikersnaam of wachtwoord is onjuist/i)).toBeInTheDocument();
     });
-
-    await userEvent.type(emailInput, "test@mail.com");
-    await userEvent.type(passwordInput, "1234");
-
-    await userEvent.click(loginButton);
-
-    await waitFor(() =>
-      expect(localStorage.getItem("token")).toBe("fake-token")
-    );
   },
 };
