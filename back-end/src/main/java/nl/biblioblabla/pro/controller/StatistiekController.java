@@ -19,7 +19,7 @@ public class StatistiekController {
     private final StatistiekService statistiekService;
     private final UserRepository userRepository;
 
-    @GetMapping("/mij")  // endpoint: GET /leningen/stats/mij
+    @GetMapping("/mij") //GET /leningen/stats/mij
     public GebruikerStats getMijnStats(Principal principal) {
 
         //Haal de email van de ingelogde gebruiker op via principal

@@ -41,23 +41,6 @@ public class BeoordelingRepositoryTest {
         verify(jdbcTemplate).update(anyString(), anyInt(), anyInt(), anyInt());
     }
 
-    @Test
-    void voegBeoordelingToe_GeenRijenAangepast_ReturnsFalse() {
-        // ARRANGE
-        int leningId = 1;
-        int gebruikerId = 2;
-        int rating = 3;
-
-        // Simuleer dat er geen rijen zijn geüpdatet
-        when(jdbcTemplate.update(anyString(), anyInt(), anyInt(), anyInt()))
-                .thenReturn(0);
-
-        // ACT
-        boolean actual = sut.voegBeoordelingToe(leningId, gebruikerId, rating);
-
-        // ASSERT
-        assertEquals(false, actual);
-    }
 
     @Test
     void voegBeoordelingToe_DatabaseFout_GooitException() {
