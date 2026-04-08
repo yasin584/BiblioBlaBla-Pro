@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./login";
-import Leesgeschiedenis from "./leesgeschiedenis"; 
-import ProtectedRoute from "./ProtectedRoute";
+import Login from "./components/Login";
+//import Leesgeschiedenis from "./leesgeschiedenis"; 
+import ProtectedRoute from "./components/Protectedrout";
 
 const App = () => {
   return (
@@ -16,7 +16,7 @@ const App = () => {
           path="/leesgeschiedenis" 
           element={
             <ProtectedRoute>
-              <Leesgeschiedenis />
+              {/* <Leesgeschiedenis /> */}
             </ProtectedRoute>
           } 
         />
