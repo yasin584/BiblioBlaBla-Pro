@@ -45,7 +45,7 @@ function Login() {
                 </p>
 
                 <form onSubmit={handleSubmit}>
-                    {error ? <p className="text-red-500">{error}</p> : null}
+                    {error ? <p className="text-red-600 font-medium">{error}</p> : null}
 
                     <div className="flex flex-col">
                         <label htmlFor="email">Email</label>
