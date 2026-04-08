@@ -27,8 +27,11 @@ public class BeoordelingRepositoryTest {
         int gebruikerId = 2;
         int rating = 5;
 
-        // Simuleer dat 1 rij wordt geüpdatet
-        when(jdbcTemplate.update(anyString(), anyInt(), anyInt(), anyInt()))
+        // De exacte SQL query die in de repository staat
+        String expectedSql = "UPDATE leningen SET beoordeling = ? WHERE id = ? AND gebruiker_id = ?";
+
+        // Gebruik eq() voor exacte waarden in plaats van any()
+        when(jdbcTemplate.update(eq(expectedSql), eq(rating), eq(leningId), eq(gebruikerId)))
                 .thenReturn(1);
 
         // ACT
@@ -37,10 +40,9 @@ public class BeoordelingRepositoryTest {
         // ASSERT
         assertEquals(true, actual);
 
-        // Controleer dat update is aangeroepen
-        verify(jdbcTemplate).update(anyString(), anyInt(), anyInt(), anyInt());
+        // Controleer met de exacte parameters
+        verify(jdbcTemplate).update(eq(expectedSql), eq(rating), eq(leningId), eq(gebruikerId));
     }
-
 
     @Test
     void voegBeoordelingToe_DatabaseFout_GooitException() {
@@ -48,9 +50,9 @@ public class BeoordelingRepositoryTest {
         int leningId = 1;
         int gebruikerId = 2;
         int rating = 4;
+        String expectedSql = "UPDATE leningen SET beoordeling = ? WHERE id = ? AND gebruiker_id = ?";
 
-        // Simuleer database fout
-        when(jdbcTemplate.update(anyString(), anyInt(), anyInt(), anyInt()))
+        when(jdbcTemplate.update(eq(expectedSql), eq(rating), eq(leningId), eq(gebruikerId)))
                 .thenThrow(new RuntimeException("Database fout"));
 
         // ACT & ASSERT
