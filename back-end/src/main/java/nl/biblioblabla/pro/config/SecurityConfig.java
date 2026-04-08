@@ -26,18 +26,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // 1. CORS aanzetten voordat de rest wordt gecontroleerd
+                // CORS aanzetten voordat de rest wordt gecontroleerd
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // 2. CSRF uitzetten (niet nodig voor stateless JWT REST API's)
+                // CSRF uitzetten (niet nodig voor stateless JWT REST API's)
                 .csrf(AbstractHttpConfigurer::disable)
 
-                // 3. Stateless sessies aanzetten (Spring mag de state niet onthouden, JWT doet dat)
+                // Stateless sessies aanzetten (Spring mag de state niet onthouden, JWT doet dat)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // 4. Autorisatie regels
+                // Autorisatie regels
                 .authorizeHttpRequests(auth -> auth
                     // Publieke endpoints
                     .requestMatchers("/auth/login", "/auth/register").permitAll()
@@ -57,7 +57,7 @@ public class SecurityConfig {
                     .anyRequest().authenticated()
                 )
 
-                // 5. Voeg onze eigen JWT filter toe vóór de standaard inlog-filter
+                // Voeg onze eigen JWT filter toe vóór de standaard inlog-filter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

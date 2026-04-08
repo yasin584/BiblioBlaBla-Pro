@@ -54,12 +54,11 @@ class AuteursRepositoryTest {
         String naam = "Nieuwe Auteur";
         Integer nieuweId = 999;
 
-        // 1. Simuleer dat de auteur niet gevonden wordt
+        // Simuleer dat de auteur niet gevonden wordt
         when(jdbcTemplate.queryForObject(anyString(), eq(Integer.class), eq(naam)))
                 .thenThrow(new EmptyResultDataAccessException(1));
 
-        // 2. Simuleer de werking van de GeneratedKeyHolder
-        // Omdat 'update' met een KeyHolder lastig te stubben is, gebruiken we een doAnswer
+        // Simuleer de werking van de GeneratedKeyHolder
         doAnswer(invocation -> {
             KeyHolder kh = invocation.getArgument(1);
             // Simuleer dat de database de ID 999 heeft gegenereerd

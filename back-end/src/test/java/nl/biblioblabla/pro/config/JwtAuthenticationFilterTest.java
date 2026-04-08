@@ -52,9 +52,7 @@ class JwtAuthenticationFilterTest {
         SecurityContextHolder.clearContext();
     }
 
-    //-----------------------------------------------
-    // Scenario 1: Geen Authorization header aanwezig
-    //-----------------------------------------------
+    // Geen Authorization header aanwezig
 
     @Test
     @DisplayName("Geen Authorization header → filter gaat direct door, geen authenticatie gezet")
@@ -71,9 +69,7 @@ class JwtAuthenticationFilterTest {
         verifyNoInteractions(jwtUtil);
     }
 
-    // -------------------------------------------------------------------------
-    // Scenario 2: Authorization header aanwezig maar ZONDER "Bearer " prefix
-    // -------------------------------------------------------------------------
+    // Authorization header aanwezig maar ZONDER Bearer prefix
 
     @Test
     @DisplayName("Authorization header zonder 'Bearer ' prefix → filter gaat door, geen authenticatie")
@@ -87,9 +83,7 @@ class JwtAuthenticationFilterTest {
         verifyNoInteractions(jwtUtil);
     }
 
-    // -------------------------------------------------------------------------
-    // Scenario 3: Geldig Bearer token → gebruiker wordt geauthenticeerd
-    // -------------------------------------------------------------------------
+    // Geldig Bearer token gebruiker wordt geauthenticeerd
 
     @Test
     @DisplayName("Geldig Bearer token → authenticatie wordt gezet in SecurityContext")
@@ -114,9 +108,7 @@ class JwtAuthenticationFilterTest {
         assertThat(auth.getAuthorities()).isEmpty();
     }
 
-    // -------------------------------------------------------------------------
-    // Scenario 4: Ongeldig token (validateToken geeft false terug)
-    // -------------------------------------------------------------------------
+    // Ongeldig token (validateToken geeft false terug)
 
     @Test
     @DisplayName("Ongeldig token → geen authenticatie gezet, filter gaat wel door")
@@ -134,9 +126,7 @@ class JwtAuthenticationFilterTest {
         verify(jwtUtil, never()).extractEmail(any());
     }
 
-    // -------------------------------------------------------------------------
-    // Scenario 5: JwtUtil gooit een exception (verlopen of corrupt token)
-    // -------------------------------------------------------------------------
+    // JwtUtil gooit een exception (verlopen of corrupt token)
 
     @Test
     @DisplayName("JwtUtil gooit exception → filter gaat door, geen authenticatie, geen crash")
@@ -153,9 +143,7 @@ class JwtAuthenticationFilterTest {
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
     }
 
-    // -------------------------------------------------------------------------
-    // Scenario 6: Lege Authorization header
-    // -------------------------------------------------------------------------
+    // Lege Authorization header
 
     @Test
     @DisplayName("Lege Authorization header → filter gaat door, geen authenticatie")
@@ -169,14 +157,12 @@ class JwtAuthenticationFilterTest {
         verifyNoInteractions(jwtUtil);
     }
 
-    // -------------------------------------------------------------------------
-    // Scenario 7: Token met extra spaties (edge case)
-    // -------------------------------------------------------------------------
+    // Token met extra spaties (edge case)
 
     @Test
     @DisplayName("'Bearer ' header met leeg token gedeelte → validateToken wordt aangeroepen met lege string")
     void bearerHeaderMetLeegToken_validateTokenWordtAangeroepen() throws ServletException, IOException {
-        // "Bearer " + lege string → token = ""
+        // "Bearer " + lege string - token = ""
         when(request.getHeader("Authorization")).thenReturn("Bearer ");
         when(jwtUtil.validateToken("")).thenReturn(false);
 
@@ -187,9 +173,7 @@ class JwtAuthenticationFilterTest {
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
     }
 
-    // -------------------------------------------------------------------------
-    // Scenario 8: extractEmail gooit exception na succesvolle validatie
-    // -------------------------------------------------------------------------
+    // extractEmail gooit exception na succesvolle validatie
 
     @Test
     @DisplayName("extractEmail gooit exception → geen authenticatie gezet, filter gaat door")
