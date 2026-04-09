@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from "react-router-dom"; 
 import Sidebar from "./components/Sidbar";
 import Header from "./components/Header";
 
 const LeningToevoegen = () => {
+    const navigate = useNavigate();
     const [titel, setTitel] = useState('');
     const [auteur, setAuteur] = useState('');
     const [genre, setGenre] = useState('');
@@ -93,6 +95,7 @@ const LeningToevoegen = () => {
                 } else {
                     setSuccesBericht("Lening succesvol toegevoegd!");
                     setTitel(''); setAuteur(''); setGenre(''); setDatum('');
+                    navigate("/leesgeschiedenis");
                 }
             })
             .catch(() => {
@@ -158,7 +161,7 @@ const LeningToevoegen = () => {
 
                         <div className="flex space-x-4">
                             <button type="submit" className="w-fit bg-[#2b58a1] text-white px-8 py-2 font-bold uppercase hover:bg-blue-800 transition-colors">
-                                Opslaan
+                                Lenen
                             </button>
                             <a href="/Leesgeschiedenis" className="w-fit bg-[#2b58a1] text-white px-8 py-2 font-bold uppercase hover:bg-blue-800 transition-colors">
                                 Annuleren

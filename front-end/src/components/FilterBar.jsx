@@ -23,6 +23,10 @@ const FilterBar = ({ filters, setFilters }) => {
           <option value="Romance">Romance</option>
           <option value="Classic">Classic</option>
           <option value="Fantasy">Fantasy</option>
+          <option value="Fantasy">Mistery</option>
+          <option value="Fantasy">Dystopian</option>
+          <option value="Fantasy">History</option>
+          
         </select>
       </div>
       <div className="w-48">
