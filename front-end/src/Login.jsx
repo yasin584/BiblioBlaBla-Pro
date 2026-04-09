@@ -22,7 +22,7 @@ function Login() {
             });
 
             const token = response.data.token;
-            localStorage.setItem("token", token);
+            localStorage.setItem("userToken", token);
 
             console.log("Token:", token);
 
