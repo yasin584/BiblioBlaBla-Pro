@@ -61,6 +61,17 @@ const LeningToevoegen = () => {
         setFoutmelding('');
         setSuccesBericht('');
 
+
+        if (titel.length < 3 || titel.length > 30) {
+            setFoutmelding("De titel moet tussen de 3 en 30 karakters lang zijn.");
+            return;
+        }
+        const titelRegex = /^[a-zA-ZÀ-ÿ\s-]+$/;
+        if (!titelRegex.test(titel)) {
+            setFoutmelding("De titel mag alleen letters, spaties en koppeltekens bevatten.");
+            return;
+        }
+
         const token = localStorage.getItem("userToken");
 
         const leningData = {
@@ -82,12 +93,9 @@ const LeningToevoegen = () => {
                 const tekst = await res.text();
 
                 if (!res.ok) {
-                    // HIER CHECKEN WE DE FOUT
                     if (res.status === 500) {
-                        // Als de server een 500 geeft bij hetzelfde boek:
                         setFoutmelding("Dit boek is momenteel al uitgeleend.");
                     } else {
-                        // Voor alle andere fouten
                         setFoutmelding(tekst || "Er is iets misgegaan.");
                     }
                 } else {
