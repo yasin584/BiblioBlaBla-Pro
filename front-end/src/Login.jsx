@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useEffect, useRef } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
     const [email, setEmail] = useState('');
     const [wachtwoord, setwachtwoord] = useState('');
     const [error, setError] = useState('');
     const inputRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         inputRef.current.focus();
@@ -24,11 +26,11 @@ function Login() {
             const token = response.data.token;
             localStorage.setItem("userToken", token);
 
-            console.log("Token:", token);
 
             setError("");
-            window.location.href = "/leningen/mijn-overzicht";
-            // window.open("https://www.youtube.com/", "_blank");
+            // window.location.href = "/leningen/mijn-overzicht";
+            setError("");
+            navigate("/lenenToevoegen");
 
 
         } catch (err) {
