@@ -16,7 +16,7 @@ const App = () => {
           path="/leesgeschiedenis" 
           element={
             <ProtectedRoute>
-              {/* <Leesgeschiedenis /> */}
+              <Leesgeschiedenis />
             </ProtectedRoute>
           } 
         />
