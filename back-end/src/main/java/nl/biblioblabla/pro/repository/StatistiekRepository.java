@@ -37,7 +37,8 @@ public class StatistiekRepository {
         try {
             return jdbcTemplate.queryForObject(sql, String.class, gebruikerId);
         } catch (Exception e) {
-            throw new GenreNietBekendException("Nog geen genres bekend voor gebruiker " + gebruikerId);
+//            throw new GenreNietBekendException("Nog geen genres bekend voor gebruiker " + gebruikerId);
+            return null; // geen leningen → geen genre
         }
     }
 

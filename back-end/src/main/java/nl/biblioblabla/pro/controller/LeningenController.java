@@ -78,6 +78,21 @@ public class LeningenController {
         return "Succes! Je hebt dit boek een beoordeling van " + rating + " gegeven.";
     }
 
+    @PatchMapping("/inleveren/{id}")
+    public String inleverenBoek(@PathVariable int id, Principal principal) {
+        if (principal == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Je moet ingelogd zijn.");
+        }
+
+        User user = userRepository.findByEmail(principal.getName());
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Gebruiker niet gevonden.");
+        }
+
+        leningenRepository.inleverenLening(id, user.getId());
+        return "Boek succesvol ingeleverd.";
+    }
+
     @PostMapping("/lenen")
     @ResponseStatus(HttpStatus.CREATED)
     public String createLening(@RequestBody LeningRequest request, Principal principal) {

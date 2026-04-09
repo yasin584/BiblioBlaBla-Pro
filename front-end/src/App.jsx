@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Login";
-//import Leesgeschiedenis from "./leesgeschiedenis"; 
-import ProtectedRoute from "./components/Protectedrout";
+import Leesgeschiedenis from "./leesgeschiedenis"; 
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
   return (
@@ -13,7 +13,7 @@ const App = () => {
         
         {/* Alleen ingelogde gebruikers hebben toegang */}
         <Route 
-          path="/leesgeschiedenis" 
+          path="/leesgeschiedenis" // Change this line
           element={
             <ProtectedRoute>
               <Leesgeschiedenis />
