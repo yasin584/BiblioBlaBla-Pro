@@ -3,7 +3,8 @@ import { Navigate } from "react-router-dom";
 const ProtectedRoute = ({ children }) => {
   // Hier moet je checken of de gebruiker is ingelogd. 
   // Dit kan via een AuthContext, Redux, of simpelweg localStorage.
-  const isAuthenticated = localStorage.getItem("userToken"); // Voorbeeld check
+  // const isAuthenticated = localStorage.getItem("userToken"); 
+  const isAuthenticated = !!localStorage.getItem("userToken");
 
   if (!isAuthenticated) {
     // Niet ingelogd? Stuur ze naar de login pagina

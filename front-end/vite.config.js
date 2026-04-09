@@ -39,3 +39,64 @@ export default defineConfig({
     }]
   }
 });
+
+// /// <reference types="vitest/config" />
+// import { defineConfig } from 'vite';
+// import react, { reactCompilerPreset } from '@vitejs/plugin-react';
+// import tailwindcss from '@tailwindcss/vite';
+// import babel from '@rolldown/plugin-babel';
+
+// // https://vite.dev/config/
+// import path from 'node:path';
+// import { fileURLToPath } from 'node:url';
+// import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+// import { playwright } from '@vitest/browser-playwright';
+
+// const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+
+// // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
+// export default defineConfig({
+//   plugins: [
+//     react(),
+//     tailwindcss(),
+//     babel({
+//       presets: [reactCompilerPreset()]
+//     })
+//   ],
+
+//   // --- TOEGEVOEGD: DE PROXY CONFIGURATIE ---
+//   server: {
+//     proxy: {
+//       // Dit stuurt verzoeken naar /leningen door naar je backend op poort 8080
+//       '/leningen': {
+//         target: 'http://localhost:8080',
+//         changeOrigin: true,
+//         secure: false,
+//       }
+//     }
+//   },
+//   // -----------------------------------------
+
+//   test: {
+//     projects: [{
+//       extends: true,
+//       plugins: [
+//         // The plugin will run tests for the stories defined in your Storybook config
+//         storybookTest({
+//           configDir: path.join(dirname, '.storybook')
+//         })
+//       ],
+//       test: {
+//         name: 'storybook',
+//         browser: {
+//           enabled: true,
+//           headless: true,
+//           provider: playwright({}),
+//           instances: [{
+//             browser: 'chromium'
+//           }]
+//         }
+//       }
+//     }]
+//   }
+// });

@@ -1,9 +1,11 @@
 package nl.biblioblabla.pro.repository;
 
 import nl.biblioblabla.pro.model.Lening;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -102,6 +104,17 @@ public class LeningenRepository {
 
         // Voer query uit en map naar Lening objecten
         return jdbcTemplate.query(sql.toString(), loanRowMapper, params.toArray());
+    }
+
+    public void inleverenLening(int leningId, int gebruikerId) {
+        String sql = "UPDATE leningen SET is_ingeleverd = true, inleverdatum = ? " +
+                "WHERE id = ? AND gebruiker_id = ?";
+
+        int rows = jdbcTemplate.update(sql, LocalDate.now(), leningId, gebruikerId);
+
+        if (rows == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lening niet gevonden of niet van jou.");
+        }
     }
 
     public void saveLening(int gebruikerId, int boekId, LocalDate inleverdatum) {

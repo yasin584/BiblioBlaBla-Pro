@@ -28,6 +28,7 @@ public class StatistiekController {
         //Zoekt de gebruiker in de database
         User user = userRepository.findByEmail(email);
 
+
         //Vraag de statistieken op via de service laag
         GebruikerStats stats = statistiekService.getGebruikerDashboard(user.getId());
 

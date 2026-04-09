@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Login";
+import Leesgeschiedenis from "./leesgeschiedenis"; 
 import LeningToevoegen from "./LeningToevoegen";
 import ProtectedRoute from "./components/ProtectedRoute";
 
