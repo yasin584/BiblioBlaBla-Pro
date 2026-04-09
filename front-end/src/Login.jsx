@@ -31,7 +31,6 @@ function Login() {
             // window.location.href = "/leningen/mijn-overzicht";
             setError("");
             navigate("/leesgeschiedenis");
-            navigate("/lenenToevoegen");
 
 
         } catch (err) {

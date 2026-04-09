@@ -3,6 +3,7 @@ import DashboardStats from './components/DashboardStats';
 import FilterBar from './components/FilterBar';
 import StarRating from './components/StarRating';
 import Header from './components/Header';
+import Sidebar from './components/Sidbar';
 
 const API_URL = "http://localhost:8080";
 
@@ -100,8 +101,12 @@ const loadData = useCallback(async () => {
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      <Header />
+    <>
+    <Sidebar />
+    <Header /> 
+    <div className="p-8 bg-gray-50 min-h-screen"> 
+
+        <div className="ml-64 flex-1">
 
       <DashboardStats stats={stats} />
 
@@ -159,6 +164,8 @@ const loadData = useCallback(async () => {
         </table>
       </div>
     </div>
+    </div>
+    </>
   );
 };
 

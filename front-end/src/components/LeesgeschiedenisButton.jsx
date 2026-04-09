@@ -5,7 +5,7 @@ const LeesgeschiedenisButton = () => {
     const navigate = useNavigate();
 
     const handlLeesgeschiedenisButton = () => {
-        navigate('/lenenToevoegen');
+        navigate('/leesgeschiedenis');
     };
 
     return (
