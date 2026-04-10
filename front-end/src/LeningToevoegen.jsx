@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import Sidebar from "./components/Sidbar";
 import Header from "./components/Header";
 
@@ -23,40 +23,60 @@ const LeningToevoegen = () => {
 
     // Suggesties voor titels
     useEffect(() => {
-        if (titel.length > 0) {
-            const token = localStorage.getItem("userToken");
-            fetch(`http://localhost:8080/leningen/suggesties/titels?titel=${encodeURIComponent(titel)}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            })
-                .then(res => res.json())
-                .then(data => setTitelSuggesties(data))
-                .catch(err => console.error(err));
-        }
+        const token = localStorage.getItem("userToken");
+        fetch(`http://localhost:8080/leningen/suggesties/titels?titel=${(titel)}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+            .then(res => res.json())
+            .then(data => setTitelSuggesties(data))
+            .catch(err => console.error(err));
     }, [titel]);
 
     // Suggesties voor auteurs
     useEffect(() => {
-        if (auteur.length > 0) {
-            const token = localStorage.getItem("userToken");
-            fetch(`http://localhost:8080/leningen/suggesties/auteurs?auteur=${encodeURIComponent(auteur)}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            })
-                .then(res => res.json())
-                .then(data => setAuteurSuggesties(data))
-                .catch(err => console.error(err));
-        }
+        const token = localStorage.getItem("userToken");
+        fetch(`http://localhost:8080/leningen/suggesties/auteurs?auteur=${(auteur)}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+            .then(res => res.json())
+            .then(data => setAuteurSuggesties(data))
+            .catch(err => console.error(err));
     }, [auteur]);
 
     const handleTitelInput = (waarde) => {
         setTitel(waarde);
         const token = localStorage.getItem("userToken");
-        fetch(`http://localhost:8080/leningen/check-genre?titelBoek=${encodeURIComponent(waarde)}`, {
+        fetch(`http://localhost:8080/leningen/check-genre?titelBoek=${(waarde)}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         })
             .then(res => res.ok ? res.text() : "")
             .then(gevondenGenre => setGenre(gevondenGenre))
             .catch(err => console.error(err));
     };
+
+    // const handleTitelInput = (waarde) => {
+    //     setTitel(waarde);
+
+    //     const token = localStorage.getItem("userToken");
+    //     const url = `http://localhost:8080/leningen/check-genre?titelBoek=${waarde}`;
+
+    //     fetch(url, {
+    //         headers: { 'Authorization': `Bearer ${token}` }
+    //     })
+    //         .then((res) => {
+    //             if (res.ok) {
+    //                 return res.text();
+    //             } else {
+    //                 return "";
+    //             }
+    //         })
+    //         .then((gevondenGenre) => {
+    //             setGenre(gevondenGenre);
+    //         })
+    //         .catch((err) => {
+    //             console.error("Fout bij ophalen genre:", err);
+    //         });
+    // };
 
     const opslaanLening = (e) => {
         e.preventDefault();
@@ -96,7 +116,7 @@ const LeningToevoegen = () => {
 
                 if (!res.ok) {
                     if (res.status === 500) {
-                        setFoutmelding("Dit boek is momenteel al uitgeleend.");
+                        setFoutmelding("De auteursnaam komt niet overeen met de titel.");
                     } else {
                         setFoutmelding(tekst || "Er is iets misgegaan.");
                     }
@@ -130,7 +150,8 @@ const LeningToevoegen = () => {
                                 ref={inputRef}
                             />
                             <datalist id="lijst-titels">
-                                {titelSuggesties.map((s, i) => <option key={i} value={s} />)}
+                                {titelSuggesties.map((suggestie, index) => (
+                                    <option key={index} value={suggestie} />))}
                             </datalist>
                         </div>
 
@@ -143,7 +164,9 @@ const LeningToevoegen = () => {
                                 onChange={(e) => setAuteur(e.target.value)}
                             />
                             <datalist id="lijst-auteurs">
-                                {auteurSuggesties.map((s, i) => <option key={i} value={s} />)}
+                                {auteurSuggesties.map((auteurNaam, index) => (
+                                    <option key={index} value={auteurNaam} />
+                                ))}
                             </datalist>
                         </div>
 
@@ -163,7 +186,7 @@ const LeningToevoegen = () => {
                                 className="w-48 border border-gray-300 p-2"
                                 value={datum}
                                 onChange={(e) => setDatum(e.target.value)}
-                                required // Maak dit verplicht om 500 errors door lege datums te voorkomen
+                                required
                             />
                         </div>
 
