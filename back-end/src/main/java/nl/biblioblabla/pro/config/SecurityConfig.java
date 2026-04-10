@@ -43,7 +43,7 @@ public class SecurityConfig {
                     .requestMatchers("/auth/login", "/auth/register").permitAll()
 
                     // Boeken
-                    .requestMatchers(HttpMethod.GET, "/boeken/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/boeken/**").authenticated()
                     .requestMatchers("/boeken/**").authenticated()
 
                     // Leningen

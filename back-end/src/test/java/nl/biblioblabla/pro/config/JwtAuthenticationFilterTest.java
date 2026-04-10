@@ -176,7 +176,7 @@ class JwtAuthenticationFilterTest {
     // extractEmail gooit exception na succesvolle validatie
 
     @Test
-    @DisplayName("extractEmail gooit exception → geen authenticatie gezet, filter gaat door")
+    @DisplayName("extractEmail gooit exception geen authenticatie gezet, filter gaat door")
     void extractEmailGooitException_filterGaatDoor() throws ServletException, IOException {
         String token = "geldig.maar.corrupt.token";
 
