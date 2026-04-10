@@ -54,20 +54,28 @@ const Leesgeschiedenis = () => {
       .catch(() => alert("Er ging iets mis bij het inleveren."));
   };
 
-  const handleRate = (id, rating) => {
-    const token = localStorage.getItem("userToken");
 
-    fetch(`http://localhost:8080/leningen/beoordeel/${id}?rating=${rating}`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(() => {
-        setLeningen(prev =>
-          prev.map(l => l.id === id ? { ...l, beoordeling: rating } : l)
-        );
-      })
-      .catch(err => console.error("Rating opslaan mislukt:", err));
-  };
+  const handleRate = (id, rating) => {
+  const token = localStorage.getItem("userToken");
+
+  fetch(`http://localhost:8080/leningen/beoordeel/${id}?rating=${rating}`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` }
+  })
+  .then(() => {
+    // Deze update gebeurt pas NA een succesvolle API call
+    setLeningen(prev => {
+      return prev.map(l => {
+        if (l.id === id) {
+          return Object.assign({}, l, { beoordeling: rating });
+        } else {
+          return l;
+        }
+      });
+    });
+  })
+  .catch(err => console.error("Fout:", err));
+};
 
   return (
     <>
