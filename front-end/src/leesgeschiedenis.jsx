@@ -63,7 +63,6 @@ const Leesgeschiedenis = () => {
     headers: { Authorization: `Bearer ${token}` }
   })
   .then(() => {
-    // Deze update gebeurt pas NA een succesvolle API call
     setLeningen(prev => {
       return prev.map(l => {
         if (l.id === id) {
