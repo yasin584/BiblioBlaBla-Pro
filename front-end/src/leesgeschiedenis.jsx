@@ -64,11 +64,11 @@ const Leesgeschiedenis = () => {
   })
   .then(() => {
     setLeningen(prev => {
-      return prev.map(l => {
-        if (l.id === id) {
-          return Object.assign({}, l, { beoordeling: rating });
+      return prev.map(lening => {
+        if (lening.id === id) {
+          return Object.assign({}, lening, { beoordeling: rating });
         } else {
-          return l;
+          return lening;
         }
       });
     });
