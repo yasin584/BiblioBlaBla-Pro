@@ -54,35 +54,10 @@ const LeningToevoegen = () => {
             .catch(err => console.error(err));
     };
 
-    // const handleTitelInput = (waarde) => {
-    //     setTitel(waarde);
-
-    //     const token = localStorage.getItem("userToken");
-    //     const url = `http://localhost:8080/leningen/check-genre?titelBoek=${waarde}`;
-
-    //     fetch(url, {
-    //         headers: { 'Authorization': `Bearer ${token}` }
-    //     })
-    //         .then((res) => {
-    //             if (res.ok) {
-    //                 return res.text();
-    //             } else {
-    //                 return "";
-    //             }
-    //         })
-    //         .then((gevondenGenre) => {
-    //             setGenre(gevondenGenre);
-    //         })
-    //         .catch((err) => {
-    //             console.error("Fout bij ophalen genre:", err);
-    //         });
-    // };
-
     const opslaanLening = (e) => {
         e.preventDefault();
         setFoutmelding('');
         setSuccesBericht('');
-
 
         if (titel.length < 3 || titel.length > 30) {
             setFoutmelding("De titel moet tussen de 3 en 30 karakters lang zijn.");
@@ -141,8 +116,9 @@ const LeningToevoegen = () => {
                 <div className="border border-gray-300 p-8 bg-white mb-6">
                     <form onSubmit={opslaanLening} className="flex flex-col gap-6">
                         <div>
-                            <label className="block text-sm font-black mb-1 uppercase">Titel</label>
+                            <label htmlFor="titel-input" className="block text-sm font-black mb-1 uppercase">Titel</label>
                             <input
+                                id="titel-input"
                                 list="lijst-titels"
                                 className="w-full border border-gray-300 p-2"
                                 value={titel}
@@ -156,8 +132,9 @@ const LeningToevoegen = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-black mb-1 uppercase">Auteur</label>
+                            <label htmlFor="auteur-input" className="block text-sm font-black mb-1 uppercase">Auteur</label>
                             <input
+                                id="auteur-input"
                                 list="lijst-auteurs"
                                 className="w-full border border-gray-300 p-2"
                                 value={auteur}
@@ -171,8 +148,9 @@ const LeningToevoegen = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-black mb-1 uppercase">Genre</label>
+                            <label htmlFor="genre-input" className="block text-sm font-black mb-1 uppercase">Genre</label>
                             <input
+                                id="genre-input"
                                 className="w-full border border-gray-300 p-2 bg-gray-50"
                                 value={genre}
                                 onChange={(e) => setGenre(e.target.value)}
@@ -180,8 +158,9 @@ const LeningToevoegen = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-black mb-1 uppercase">Inleverdatum</label>
+                            <label htmlFor="datum-input" className="block text-sm font-black mb-1 uppercase">Inleverdatum</label>
                             <input
+                                id="datum-input"
                                 type="date"
                                 className="w-48 border border-gray-300 p-2"
                                 value={datum}

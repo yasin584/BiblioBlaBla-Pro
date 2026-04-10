@@ -15,12 +15,11 @@ export default {
   ],
 };
 
-// Een super simpele mock die altijd "Succes" geeft
 const setupSimpeleMock = () => {
   window.fetch = () =>
     Promise.resolve({
       ok: true,
-      json: () => Promise.resolve(['Boek 1']),
+      json: () => Promise.resolve(['Boek']),
       text: () => Promise.resolve("Succes"),
     });
 };
