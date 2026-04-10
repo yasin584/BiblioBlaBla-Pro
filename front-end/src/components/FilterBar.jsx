@@ -4,6 +4,7 @@ const FilterBar = ({ filters, setFilters }) => {
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
+  
 
   return (
     <div className="bg-gray-100 p-4 rounded-t-lg flex gap-4 items-end border-b">
@@ -20,12 +21,12 @@ const FilterBar = ({ filters, setFilters }) => {
         <label className="block text-xs font-bold uppercase mb-1">Genre</label>
         <select name="genre" className="w-full p-2 border rounded" onChange={handleChange}>
           <option value="ALLE GENRES">ALLE GENRES</option>
-          <option value="Romance">Romance</option>
-          <option value="Classic">Classic</option>
-          <option value="Fantasy">Fantasy</option>
-          <option value="Fantasy">Mistery</option>
-          <option value="Fantasy">Dystopian</option>
-          <option value="Fantasy">History</option>
+            <option value="Romance">Romance</option>
+            <option value="Classic">Classic</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Mystery">Mystery</option>
+            <option value="Dystopian">Dystopian</option>
+            <option value="History">History</option>
           
         </select>
       </div>
