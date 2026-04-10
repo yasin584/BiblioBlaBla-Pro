@@ -4,6 +4,7 @@ import nl.biblioblabla.pro.model.Lening;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,20 +17,17 @@ public class LeningenRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    // Constructor injectie van JdbcTemplate
     public LeningenRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // RowMapper voor Lening
     private final RowMapper<Lening> loanRowMapper = (rs, rowNum) -> {
         Lening loan = new Lening();
-
-        // Basisvelden
         loan.setId(rs.getInt("id"));
         loan.setGebruikerId(rs.getInt("gebruiker_id"));
         loan.setBoekId(rs.getInt("boek_id"));
 
-        // Uitleen- en inleverdatum omzetten naar LocalDate
         if (rs.getDate("uitleendatum") != null) {
             loan.setUitleendatum(rs.getDate("uitleendatum").toLocalDate());
         }
@@ -37,20 +35,17 @@ public class LeningenRepository {
             loan.setInleverdatum(rs.getDate("inleverdatum").toLocalDate());
         }
 
-        // Beoordeling kan null zijn
         int beoordeling = rs.getInt("beoordeling");
         loan.setBeoordeling(rs.wasNull() ? null : beoordeling);
 
-        // Boolean veld
         loan.setIngeleverd(rs.getBoolean("is_ingeleverd"));
 
-        // Extra info uit JOIN
         loan.setTitel(rs.getString("titel"));
         loan.setGenre(rs.getString("genre"));
         loan.setAvgRating(rs.getDouble("gemiddelde_beoordeling"));
         loan.setAuteurNaam(rs.getString("auteur_naam"));
 
-        return loan;  // RowMapper retourneert een Lening object
+        return loan;
     };
 
     private final String JOIN_QUERY =
@@ -59,51 +54,52 @@ public class LeningenRepository {
                     "LEFT JOIN boeken b ON l.boek_id = b.id " +
                     "LEFT JOIN auteurs a ON b.auteur_id = a.id ";
 
-    /**
-     * Zoek leningen op basis van filters
-     *
-     * @param gebruikerId id van de gebruiker
-     * @param query zoekterm (titel of auteur)
-     * @param genre genre filter
-     * @param start vanaf datum
-     * @param eind tot datum
-     * @return lijst van leningen die voldoen aan de filters
-     */
+    // Zoeken van leningen met filters
     public List<Lening> searchLeningen(int gebruikerId, String query, String genre, LocalDate start, LocalDate eind) {
+        try {
+            StringBuilder sql = new StringBuilder(JOIN_QUERY);
+            List<Object> params = new ArrayList<>();
+            sql.append(" WHERE l.gebruiker_id = ?");
+            params.add(gebruikerId);
 
-        // Bouw SQL statement op basis van filters
-        StringBuilder sql = new StringBuilder(JOIN_QUERY);
-        sql.append(" WHERE l.gebruiker_id = ?");
+            if (query != null && !query.isEmpty()) {
+                sql.append(" AND (b.titel LIKE ? OR a.naam LIKE ?)");
+                String zoek = "%" + query + "%";
+                params.add(zoek);
+                params.add(zoek);
+            }
 
-        List<Object> params = new ArrayList<>();
-        params.add(gebruikerId);
+            if (genre != null && !genre.equalsIgnoreCase("ALLE GENRES") && !genre.isEmpty()) {
+                sql.append(" AND b.genre = ?");
+                params.add(genre);
+            }
 
-        // Zoekterm filter (titel of auteur)
-        if (query != null && !query.isEmpty()) {
-            sql.append(" AND (b.titel LIKE ? OR a.naam LIKE ?)");
-            String fuzzy = "%" + query + "%";  // % = wildcard voor LIKE
-            params.add(fuzzy);
-            params.add(fuzzy);
+            if (start != null) {
+                sql.append(" AND l.uitleendatum >= ?");
+                params.add(java.sql.Date.valueOf(start));
+            }
+            if (eind != null) {
+                sql.append(" AND l.uitleendatum <= ?");
+                params.add(java.sql.Date.valueOf(eind));
+            }
+
+            List<Lening> leningen = jdbcTemplate.query(sql.toString(), loanRowMapper, params.toArray());
+
+            if (leningen.isEmpty()) {
+                if (genre != null && !genre.equalsIgnoreCase("ALLE GENRES")) {
+                    throw new GenreNietGevondenException(genre);
+                }
+                if (start != null || eind != null) {
+                    throw new GeenLeningenVoorDatumException(start, eind);
+                }
+                throw new GeenLeningenVoorGebruikerException(gebruikerId);
+            }
+
+            return leningen;
+
+        } catch (DataAccessException ex) {
+            throw new LeningenRepositoryException("Fout bij ophalen van leningen: " + ex.getMessage());
         }
-
-        // Genre filter
-        if (genre != null && !genre.equalsIgnoreCase("ALLE GENRES") && !genre.isEmpty()) {
-            sql.append(" AND b.genre = ?");
-            params.add(genre);
-        }
-
-        // Datum filters
-        if (start != null) {
-            sql.append(" AND l.uitleendatum >= ?");
-            params.add(start);
-        }
-        if (eind != null) {
-            sql.append(" AND l.uitleendatum <= ?");
-            params.add(eind);
-        }
-
-        // Voer query uit en map naar Lening objecten
-        return jdbcTemplate.query(sql.toString(), loanRowMapper, params.toArray());
     }
 
     public void inleverenLening(int leningId, int gebruikerId) {
@@ -120,13 +116,12 @@ public class LeningenRepository {
     public void saveLening(int gebruikerId, int boekId, LocalDate inleverdatum) {
         String sql = "INSERT INTO leningen (gebruiker_id, boek_id, uitleendatum, inleverdatum, is_ingeleverd) " +
                 "VALUES (?, ?, ?, ?, ?)";
-
         jdbcTemplate.update(sql,
                 gebruikerId,
                 boekId,
-                LocalDate.now(), // Vandaag is de uitleendatum
-                inleverdatum,
-                false            // Boek is nog niet ingeleverd
+                java.sql.Date.valueOf(LocalDate.now()),
+                java.sql.Date.valueOf(inleverdatum),
+                false
         );
     }
 }

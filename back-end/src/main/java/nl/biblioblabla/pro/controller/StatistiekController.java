@@ -19,7 +19,7 @@ public class StatistiekController {
     private final StatistiekService statistiekService;
     private final UserRepository userRepository;
 
-    @GetMapping("/mij")  // endpoint: GET /leningen/stats/mij
+    @GetMapping("/mij") //GET /leningen/stats/mij
     public GebruikerStats getMijnStats(Principal principal) {
 
         //Haal de email van de ingelogde gebruiker op via principal
@@ -30,7 +30,7 @@ public class StatistiekController {
 
 
         //Vraag de statistieken op via de service laag
-        GebruikerStats stats = statistiekService.getGebruikerDashboard(user.getId());
+        GebruikerStats stats = statistiekService.getGebruikerBoeken(user.getId());
 
         //Geef de statistieken terug aan de client
         return stats;

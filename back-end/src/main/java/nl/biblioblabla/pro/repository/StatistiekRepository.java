@@ -1,7 +1,7 @@
 package nl.biblioblabla.pro.repository;
 
 import lombok.RequiredArgsConstructor;
-import nl.biblioblabla.pro.exception.GenreNietBekendException;
+import nl.biblioblabla.pro.exception.GenreNietGevondenException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -22,11 +22,11 @@ public class StatistiekRepository {
         jdbcTemplate.update(sql, gemiddelde, boekId);
     }
 
-    // Haalt de stats op voor de DTO
+    // telt het totale aantal boeken
     public int getTotaalGeleend(int gebruikerId) {
         return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM leningen WHERE gebruiker_id = ?", Integer.class, gebruikerId);
     }
-
+    //geeft het meest geleende genre van een gebruiker terug
     public String getPopulairsteGenre(int gebruikerId) {
         String sql = "SELECT b.genre FROM leningen l " +
                 "JOIN boeken b ON l.boek_id = b.id " +

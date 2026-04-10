@@ -1,6 +1,7 @@
 package nl.biblioblabla.pro.repository;
 
-import nl.biblioblabla.pro.exception.GenreNietBekendException;
+
+import nl.biblioblabla.pro.exception.GenreNietGevondenException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -104,19 +105,17 @@ public class StatistiekRepositoryTest {
     void getPopulairsteGenre_BijFout_GooitEigenException() {
         // ARRANGE
         int gebruikerId = 1;
-
-        // Mockito gooit een RuntimeException
         when(jdbcTemplate.queryForObject(anyString(), eq(String.class), eq(gebruikerId)))
                 .thenThrow(new RuntimeException("DB fout"));
 
         // ACT & ASSERT
-        GenreNietBekendException exception = assertThrows(
-                GenreNietBekendException.class,
+        GenreNietGevondenException exception = assertThrows(
+                GenreNietGevondenException.class,
                 () -> sut.getPopulairsteGenre(gebruikerId)
         );
 
-        // controleer de boodschap
-        assertEquals("Nog geen genres bekend voor gebruiker 1", exception.getMessage());
+        // Update the expected string here
+        assertEquals("Geen leningen gevonden voor genre: Nog geen genres bekend voor gebruiker 1", exception.getMessage());
     }
 
 
