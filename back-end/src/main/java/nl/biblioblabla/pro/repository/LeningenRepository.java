@@ -1,5 +1,9 @@
 package nl.biblioblabla.pro.repository;
 
+import nl.biblioblabla.pro.exception.GeenLeningenVoorDatumException;
+import nl.biblioblabla.pro.exception.GeenLeningenVoorGebruikerException;
+import nl.biblioblabla.pro.exception.GenreNietGevondenException;
+import nl.biblioblabla.pro.exception.LeningenRepositoryException;
 import nl.biblioblabla.pro.model.Lening;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
