@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import DashboardStats from './components/DashboardStats';
-import FilterBar from './components/FilterBar';
-import StarRating from './components/StarRating';
+import DashboardStats from '../components/DashboardStats';
+import FilterBar from '../components/FilterBar';
+import StarRating from '../components/StarRating';
+import '../../src/index.css';
 
 export default {
   title: 'Bibliotheek/Leesgeschiedenis',
@@ -218,90 +219,5 @@ export const MetData = () => {
       onInleveren={handleInleveren}
       onRate={handleRate}
     />
-  );
-};
-
-export const AutoFill = () => {
-  const [leningen, setLeningen] = useState([]);
-  const [stats, setStats] = useState({});
-  const [filled, setFilled] = useState(false);
-
-  const handleAutoFill = () => {
-    setLeningen(MOCK_LENINGEN);
-    setStats(MOCK_STATS);
-    setFilled(true);
-  };
-
-  const handleReset = () => {
-    setLeningen([]);
-    setStats({});
-    setFilled(false);
-  };
-
-  const handleInleveren = (id) => {
-    setLeningen((prev) =>
-      prev.map((l) =>
-        l.id === id
-          ? { ...l, ingeleverd: true, inleverdatum: new Date().toISOString().slice(0, 10) }
-          : l
-      )
-    );
-  };
-
-  const handleRate = (id, rating) => {
-    setLeningen((prev) =>
-      prev.map((l) => (l.id === id ? { ...l, beoordeling: rating } : l))
-    );
-  };
-
-  return (
-    <div>
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          padding: '1rem',
-          background: '#f8fafc',
-          borderBottom: '1px solid #e2e8f0',
-        }}
-      >
-        <button
-          onClick={handleAutoFill}
-          disabled={filled}
-          style={{
-            padding: '6px 16px',
-            background: filled ? '#94a3b8' : '#3b82f6',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: filled ? 'default' : 'pointer',
-            fontSize: '13px',
-          }}
-        >
-          ✨ Auto-fill met mock data
-        </button>
-        <button
-          onClick={handleReset}
-          style={{
-            padding: '6px 14px',
-            background: '#e5e7eb',
-            color: '#374151',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '13px',
-          }}
-        >
-          Reset
-        </button>
-      </div>
-
-      <LeesgeschiedenisUI
-        leningen={leningen}
-        stats={stats}
-        onInleveren={handleInleveren}
-        onRate={handleRate}
-      />
-    </div>
   );
 };

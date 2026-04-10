@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import StarRating from './components/StarRating';
+import StarRating from '../../components/StarRating';
 
 export default {
   title: 'Bibliotheek/StarRating',
@@ -41,40 +41,6 @@ export const Interactief = () => {
       <StarRating rating={rating} onRate={setRating} />
       <p style={{ marginTop: '0.5rem', fontSize: '13px', color: '#888' }}>
         Huidige rating: <strong>{rating}</strong> / 5
-      </p>
-    </div>
-  );
-};
-
-export const AutoFill = () => {
-  const [rating, setRating] = useState(0);
-
-  const handleAutoFill = () => {
-    const randomRating = Math.floor(Math.random() * 5) + 1;
-    setRating(randomRating);
-  };
-
-  return (
-    <div style={{ padding: '1rem' }}>
-      <button
-        onClick={handleAutoFill}
-        style={{
-          marginBottom: '1rem',
-          padding: '6px 14px',
-          background: '#3b82f6',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          fontSize: '13px',
-        }}
-      >
-        ✨ Auto-fill (willekeurige rating)
-      </button>
-      <br />
-      <StarRating rating={rating} onRate={setRating} />
-      <p style={{ marginTop: '0.5rem', fontSize: '13px', color: '#888' }}>
-        Rating: <strong>{rating}</strong> / 5
       </p>
     </div>
   );
