@@ -49,7 +49,7 @@ class StatistiekControllerTest {
 
         // mocks instellen
         when(userRepository.findByEmail(email)).thenReturn(user);
-        when(statistiekService.getGebruikerDashboard(1)).thenReturn(stats);
+        when(statistiekService.getGebruikerBoeken(1)).thenReturn(stats);
 
         // ACT
         GebruikerStats result = sut.getMijnStats(principal);
@@ -60,7 +60,7 @@ class StatistiekControllerTest {
 
         // controleren of methods zijn aangeroepen
         verify(userRepository).findByEmail(email);
-        verify(statistiekService).getGebruikerDashboard(1);
+        verify(statistiekService).getGebruikerBoeken(1);
     }
 
 

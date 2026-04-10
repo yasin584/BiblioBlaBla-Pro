@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
-
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -18,7 +17,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    //afhandelen van InvalidCredentialsException
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(InvalidCredentialsException.class)
     public ProblemDetail handleInvalidCredentialsException(InvalidCredentialsException e) {
@@ -30,8 +28,24 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
-    @ExceptionHandler(GenreNietBekendException.class)
-    public ProblemDetail handleGenreNietBekend(GenreNietBekendException e) {
+
+    @ExceptionHandler(GenreNietGevondenException.class)
+    public ProblemDetail handleGenreNietGevonden(GenreNietGevondenException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(GeenLeningenVoorDatumException.class)
+    public ProblemDetail handleGeenLeningenVoorDatum(GeenLeningenVoorDatumException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(GeenLeningenVoorGebruikerException.class)
+    public ProblemDetail handleGeenLeningenVoorGebruiker(GeenLeningenVoorGebruikerException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(LeningenRepositoryException.class)
+    public ProblemDetail handleLeningenRepositoryException(LeningenRepositoryException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 }

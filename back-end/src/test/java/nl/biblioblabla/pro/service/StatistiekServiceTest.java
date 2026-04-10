@@ -33,7 +33,7 @@ class StatistiekServiceTest {
         when(statistiekRepository.getPopulairsteGenre(gebruikerId)).thenReturn("Fantasy");
 
         // ACT
-        GebruikerStats stats = sut.getGebruikerDashboard(gebruikerId);
+        GebruikerStats stats = sut.getGebruikerBoeken(gebruikerId);
 
         // ASSERT
         // controleer of totaal geleend klopt
