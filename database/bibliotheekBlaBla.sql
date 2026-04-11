@@ -36,6 +36,12 @@ CREATE TABLE leningen (
 );
 
 
+USE biblioblabla_pro;
+
+
+USE biblioblabla_pro;
+
+
 INSERT INTO auteurs (naam) VALUES 
 ('J.R.R. Tolkien'), 
 ('George Orwell'), 
@@ -82,3 +88,6 @@ INSERT INTO leningen (gebruiker_id, boek_id, uitleendatum, inleverdatum, beoorde
 (4, 2, '2024-01-20', '2024-02-10', 5, TRUE),
 (5, 3, '2024-02-05', '2024-02-20', 4, TRUE),
 (1, 10, '2024-03-20', NULL, NULL, FALSE);
+
+
+
