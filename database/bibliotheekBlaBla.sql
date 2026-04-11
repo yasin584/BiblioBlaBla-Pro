@@ -36,49 +36,49 @@ CREATE TABLE leningen (
 );
 
 
-USE biblioblabla_pro;
-
--- AUTEURS
-INSERT INTO auteurs (naam) VALUES
-('J.K. Rowling'),
-('George R.R. Martin'),
-('J.R.R. Tolkien'),
-('Agatha Christie'),
-('Stephen King');
-
--- BOEKEN
-INSERT INTO boeken (titel, genre, auteur_id, gemiddelde_beoordeling) VALUES
-('Harry Potter en de Steen der Wijzen', 'Fantasy', 1, 4.80),
-('Harry Potter en de Geheime Kamer', 'Fantasy', 1, 4.60),
-('Game of Thrones', 'Fantasy', 2, 4.70),
-('Clash of Kings', 'Fantasy', 2, 4.50),
-('The Hobbit', 'Fantasy', 3, 4.90),
-('In de Ban van de Ring', 'Fantasy', 3, 4.95),
-('Murder on the Orient Express', 'Mysterie', 4, 4.40),
-('It', 'Horror', 5, 4.30);
+INSERT INTO auteurs (naam) VALUES 
+('J.R.R. Tolkien'), 
+('George Orwell'), 
+('J.K. Rowling'), 
+('Agatha Christie'), 
+('Stephen King'),
+('Lucinda Riley');
 
 
+INSERT INTO boeken (titel, genre, auteur_id, gemiddelde_beoordeling) VALUES 
+('The Hobbit', 'Fantasy', 1, 4.50),
+('The Lord of the Rings', 'Fantasy', 1, 4.80),
+('1984', 'Dystopian', 2, 4.20),
+('Animal Farm', 'Satire', 2, 4.00),
+('Harry Potter and the Sorcerer\'s Stone', 'Fantasy', 3, 4.70),
+('Harry Potter and the Chamber of Secrets', 'Fantasy', 3, 4.60),
+('Murder on the Orient Express', 'Mystery', 4, 4.30),
+('Death on the Nile', 'Mystery', 4, 4.10),
+('The Shining', 'Horror', 5, 4.40),
+('The Seven Sisters', 'Romance', 6, 4.15);
 
--- GEBRUIKERS
-INSERT INTO gebruikers (naam, email, wachtwoord_hash) VALUES
-('Jan Jansen', 'jan@example.com', 'hash123'),
-('Piet Pieters', 'piet@example.com', 'hash456'),
-('Klaas Klaassen', 'klaas@example.com', 'hash789'),
-('Anna de Vries', 'anna@example.com', 'hashabc'),
-('Sara Bakker', 'sara@example.com', 'hashdef');
+-- 3. Gebruikers toevoegen (wachtwoorden zijn fictieve hashes)
+INSERT INTO gebruikers (naam, email, wachtwoord_hash) VALUES 
+('Sara', 'sara@gmail.com', '$2a$12$oLtTf97xWJ1C6.PyvzadzOZ1C6DbT.rDVlSx6vOur2HpKfESXyLLi'), -- hash123
+('Sisa', 'sisa@gmail.com', '$2a$12$oLtTf97xWJ1C6.PyvzadzOZ1C6DbT.rDVlSx6vOur2HpKfESXyLLi'), -- hash123
+('Pieter Post', 'pieter@example.com', '123'),
+('Lotte Mulder', 'lotte@example.com', '123'),
+('Kees de Boer', 'kees@example.com', '123');
 
-INSERT INTO gebruikers (naam, email, wachtwoord_hash) VALUES
-('sara','sara@gmail.com','$2a$12$wdAjzhNmjyLkobzD6epTrOnXR77e40iQpl5HakudNbPG4lBCL3rm2'); -- wachtwoord hash123
-
-
-
--- LENINGEN
-INSERT INTO leningen (gebruiker_id, boek_id, uitleendatum, inleverdatum, beoordeling, is_ingeleverd) VALUES
-(1, 1, '2026-01-10', '2026-01-20', 5, TRUE),
-(1, 3, '2026-02-01', NULL, NULL, FALSE),
-(2, 5, '2026-01-15', '2026-01-25', 4, TRUE),
-(3, 2, '2026-03-01', NULL, NULL, FALSE),
-(4, 7, '2026-02-10', '2026-02-18', 4, TRUE),
-(5, 8, '2026-02-20', '2026-03-01', 5, TRUE),
-(2, 6, '2026-03-05', NULL, NULL, FALSE);
-
+INSERT INTO leningen (gebruiker_id, boek_id, uitleendatum, inleverdatum, beoordeling, is_ingeleverd) VALUES 
+(1, 1, '2024-01-05', '2024-01-20', 5, TRUE),
+(1, 3, '2024-02-01', '2024-02-15', 4, TRUE),
+(2, 5, '2024-01-10', '2024-01-25', 5, TRUE),
+(2, 2, '2024-03-01', NULL, NULL, FALSE),
+(3, 7, '2024-02-10', '2024-02-28', 4, TRUE),
+(3, 9, '2024-03-05', NULL, NULL, FALSE),
+(4, 10, '2024-01-15', '2024-02-01', 4, TRUE),
+(4, 4, '2024-02-20', '2024-03-05', 3, TRUE),
+(5, 1, '2024-02-15', '2024-03-01', 5, TRUE),
+(5, 6, '2024-03-10', NULL, NULL, FALSE),
+(1, 8, '2024-03-12', NULL, NULL, FALSE),
+(2, 4, '2023-12-01', '2023-12-15', 4, TRUE),
+(3, 5, '2024-03-15', NULL, NULL, FALSE),
+(4, 2, '2024-01-20', '2024-02-10', 5, TRUE),
+(5, 3, '2024-02-05', '2024-02-20', 4, TRUE),
+(1, 10, '2024-03-20', NULL, NULL, FALSE);

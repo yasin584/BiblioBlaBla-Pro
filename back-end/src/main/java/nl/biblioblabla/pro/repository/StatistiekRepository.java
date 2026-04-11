@@ -5,6 +5,7 @@ import nl.biblioblabla.pro.exception.GenreNietGevondenException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+
 @Repository
 @RequiredArgsConstructor
 public class StatistiekRepository {
@@ -27,6 +28,7 @@ public class StatistiekRepository {
         return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM leningen WHERE gebruiker_id = ?", Integer.class, gebruikerId);
     }
     //geeft het meest geleende genre van een gebruiker terug
+// StatistiekRepository.java
     public String getPopulairsteGenre(int gebruikerId) {
         String sql = "SELECT b.genre FROM leningen l " +
                 "JOIN boeken b ON l.boek_id = b.id " +
@@ -37,8 +39,8 @@ public class StatistiekRepository {
         try {
             return jdbcTemplate.queryForObject(sql, String.class, gebruikerId);
         } catch (Exception e) {
-//            throw new GenreNietBekendException("Nog geen genres bekend voor gebruiker " + gebruikerId);
-            return null; // geen leningen → geen genre
+            // Gooi de exception in plaats van null te retourneren
+            throw new GenreNietGevondenException("Nog geen genres bekend voor gebruiker " + gebruikerId);
         }
     }
 

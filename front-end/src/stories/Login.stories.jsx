@@ -30,7 +30,7 @@ const mockAxios = (status = 200, response = {}) => {
   };
 };
 
-// 1. Succes story
+// Succes story
 export const SuccesvolleLogin = {
   render: () => {
     mockAxios(200, { token: "fake-token" });
@@ -38,7 +38,6 @@ export const SuccesvolleLogin = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // Gebruik findBy om er zeker van te zijn dat elementen geladen zijn
     await userEvent.type(canvas.getByLabelText(/email/i), "test@mail.com");
     await userEvent.type(canvas.getByLabelText(/wachtwoord/i), "1234");
     await userEvent.click(canvas.getByRole("button", { name: /inloggen/i }));
@@ -47,7 +46,7 @@ export const SuccesvolleLogin = {
   },
 };
 
-// 2. Foutmelding story
+// Foutmelding story
 export const VerkeerdeInloggegevens = {
   render: () => {
     mockAxios(401);

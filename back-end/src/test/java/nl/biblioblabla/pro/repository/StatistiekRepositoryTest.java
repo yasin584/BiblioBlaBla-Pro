@@ -1,7 +1,7 @@
 package nl.biblioblabla.pro.repository;
 
 
-//import nl.biblioblabla.pro.exception.GenreNietGevondenException;
+import nl.biblioblabla.pro.exception.GenreNietGevondenException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -101,22 +101,22 @@ public class StatistiekRepositoryTest {
 
     // 5. POPULAIRSTE GENRE (FOUT → DEFAULT)
 
-//    @Test
-//    void getPopulairsteGenre_BijFout_GooitEigenException() {
-//        // ARRANGE
-//        int gebruikerId = 1;
-//        when(jdbcTemplate.queryForObject(anyString(), eq(String.class), eq(gebruikerId)))
-//                .thenThrow(new RuntimeException("DB fout"));
-//
-//        // ACT & ASSERT
-//        GenreNietGevondenException exception = assertThrows(
-//                GenreNietGevondenException.class,
-//                () -> sut.getPopulairsteGenre(gebruikerId)
-//        );
-//
-//        // Update the expected string here
-//        assertEquals("Geen leningen gevonden voor genre: Nog geen genres bekend voor gebruiker 1", exception.getMessage());
-//    }
+    @Test
+    void getPopulairsteGenre_BijFout_GooitEigenException() {
+        // ARRANGE
+        int gebruikerId = 1;
+        when(jdbcTemplate.queryForObject(anyString(), eq(String.class), eq(gebruikerId)))
+                .thenThrow(new RuntimeException("DB fout"));
+
+        // ACT & ASSERT
+        GenreNietGevondenException exception = assertThrows(
+                GenreNietGevondenException.class,
+                () -> sut.getPopulairsteGenre(gebruikerId)
+        );
+
+        // Update the expected string here
+        assertEquals("Geen leningen gevonden voor genre: Nog geen genres bekend voor gebruiker 1", exception.getMessage());
+    }
 
 
     // 6. BOEK ID BIJ LENING

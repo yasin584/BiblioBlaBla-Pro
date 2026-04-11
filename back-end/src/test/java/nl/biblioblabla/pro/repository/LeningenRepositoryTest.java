@@ -1,6 +1,6 @@
 package nl.biblioblabla.pro.repository;
 
-//import nl.biblioblabla.pro.exception.GeenLeningenVoorGebruikerException;
+import nl.biblioblabla.pro.exception.GeenLeningenVoorGebruikerException;
 import nl.biblioblabla.pro.model.Lening;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,20 +58,20 @@ public class LeningenRepositoryTest {
     }
 
 
-    // 2. GEEN RESULTATEN
+     //2. GEEN RESULTATEN
 
-//    @Test
-//    void searchLeningen_GeenResultaten_GooitException() {
-//        // ARRANGE
-//        int gebruikerId = 1;
-//        when(jdbcTemplate.query(anyString(), any(RowMapper.class), any(Object[].class)))
-//                .thenReturn(List.of()); // Mock returns empty list
-//
-//        // ACT & ASSERT
-//        assertThrows(GeenLeningenVoorGebruikerException.class, () -> {
-//            sut.searchLeningen(gebruikerId, null, null, null, null);
-//        });
-//    }
+    @Test
+    void searchLeningen_GeenResultaten_GooitException() {
+        // ARRANGE
+        int gebruikerId = 1;
+        when(jdbcTemplate.query(anyString(), any(RowMapper.class), any(Object[].class)))
+                .thenReturn(List.of()); // Mock returns empty list
+
+        // ACT & ASSERT
+        assertThrows(GeenLeningenVoorGebruikerException.class, () -> {
+            sut.searchLeningen(gebruikerId, null, null, null, null);
+        });
+    }
 
 
     // DATABASE FOUT
